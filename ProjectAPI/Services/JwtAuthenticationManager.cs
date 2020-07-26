@@ -18,7 +18,7 @@ namespace ProjectAPI.Services
         {
             this.key = key;
         }
-        public string Authenticate(string email, string role)
+        public string Authenticate(string email, string role, int id)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokentKey = Encoding.ASCII.GetBytes(key);
@@ -27,7 +27,8 @@ namespace ProjectAPI.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Email, email),
-                    new Claim(ClaimTypes.Role, role)
+                    new Claim(ClaimTypes.Role, role),
+                    new Claim(ClaimTypes.NameIdentifier, id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials( 

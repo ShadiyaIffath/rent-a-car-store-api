@@ -62,17 +62,33 @@ namespace Model.Repositories
             return false;
         }
 
-        public AccountType GetAccountType(int id)
-        {
-            return _clientDbContext.AccountTypes.FirstOrDefault(x => x.id == id);
-        }
-
         public void createCustomerAccount(Account account)
         {
             account.typeId = (int)AccTypes.customer;
             account.type = GetAccountType(account.typeId);
             account.EncryptModel();
             Create(account);
+        }
+
+        private AccountType GetAccountType(int id)
+        {
+            return _clientDbContext.AccountTypes.FirstOrDefault(x => x.id == id);
+        }
+
+        public int getAccountId(string email)
+        {
+            int id = -1;
+            List<Account> accounts = _clientDbContext.Accounts.ToList<Account>();
+
+            foreach (Account ac in accounts)
+            {
+                ac.email = EncryptUtil.DecryptString(ac.email);
+                if (ac.email == email)
+                {
+                    id = ac.id;
+                }
+            }
+            return id;
         }
     }
 }

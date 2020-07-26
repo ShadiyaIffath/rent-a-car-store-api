@@ -56,8 +56,8 @@ namespace ProjectAPI.Controllers
 
             if (loggedIn != null)
             {
-
-                var token =  _jwtAuthenticationManager.Authenticate(logincredentials.email, loggedIn);
+                int id = _accountRepository.getAccountId(logincredentials.email);
+                var token =  _jwtAuthenticationManager.Authenticate(logincredentials.email, loggedIn, id);
 
                 if(token == null)
                 {

@@ -7,6 +7,6 @@ namespace ProjectAPI.Interfaces
 {
     public interface IJwtAuthenticationManager
     {
-        string Authenticate(string email, string role);
+        string Authenticate(string email, string role, int id);
     }
 }

@@ -12,5 +12,7 @@ namespace Model.Repositories.Interfaces
         bool validateEmailInUse(string email);
 
         void createCustomerAccount(Account account);
+
+        int getAccountId(string email);
     }
 }
