@@ -62,7 +62,10 @@ namespace ProjectAPI
             var systemConnectionString = Startup.configuration["AppSettings:ConnectionString"];
             var key = Startup.configuration["AppSettings:JwtKey"];
 
-            services.AddDbContext<ClientDbContext>(options => options.UseSqlServer(systemConnectionString));
+            services.AddDbContext<ClientDbContext>(options =>
+                options.UseSqlServer(systemConnectionString,
+                    optionsBuilder =>
+                        optionsBuilder.MigrationsAssembly("Model")));
 
             services.AddAuthentication(x =>
            {

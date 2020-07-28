@@ -44,6 +44,7 @@ namespace Model.Entities
         public bool active { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime activatedDate { get; set; }
 
         [ForeignKey("typeId")]

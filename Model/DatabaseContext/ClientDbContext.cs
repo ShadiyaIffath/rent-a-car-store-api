@@ -17,5 +17,9 @@ namespace Model.DatabaseContext
 
         public DbSet<AccountType> AccountTypes { get; set; }
 
+        public DbSet<VehicleType> VehicleTypes { get; set; }
+
+        public DbSet<Vehicle> Vehicles { get; set; }
+
     }
 }
