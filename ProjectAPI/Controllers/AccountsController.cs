@@ -80,7 +80,7 @@ namespace ProjectAPI.Controllers
             }
             if (_accountRepository.validateEmailInUse(customerDto.email))
             {
-                return Ok("Email is in use");
+                return Conflict("Email in use");
             }
             
             Account account = new Account();

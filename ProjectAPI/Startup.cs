@@ -82,6 +82,17 @@ namespace ProjectAPI
                    ValidateIssuer = false,
                    ValidateAudience = false
                };
+               x.Events = new JwtBearerEvents
+               {
+                   OnAuthenticationFailed = context =>
+                   {
+                       if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                       {
+                           context.Response.Headers.Add("Token-Expired", "true");
+                       }
+                       return Task.CompletedTask;
+                   }
+               };
            });
 
             var mappingConfig = new MapperConfiguration(mc =>
@@ -93,6 +104,7 @@ namespace ProjectAPI
             services.AddSingleton(mapper);
 
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
         }
 
