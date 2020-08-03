@@ -17,9 +17,9 @@ namespace Model.Entities
         public string type { get; set; }
 
         [Required]
-        public double pricePerDay { get; set; }
+        public int passengers { get; set; }
 
         [Required]
-        public byte[] image { get; set; }
+        public double pricePerDay { get; set; }
     }
 }

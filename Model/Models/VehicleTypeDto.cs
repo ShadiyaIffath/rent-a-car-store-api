@@ -10,8 +10,8 @@ namespace Model.Models
 
         public string type { get; set; }
 
-        public double pricePerDay { get; set; }
+        public int passengers { get; set; }
 
-        public byte[] image { get; set; }
+        public double pricePerDay { get; set; }
     }
 }

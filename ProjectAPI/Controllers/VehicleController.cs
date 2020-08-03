@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
 using Model.Models;
 using Model.Repositories.Interfaces;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -45,14 +46,14 @@ namespace ProjectAPI.Controllers
         {
         }
 
-        [HttpGet("vehicles")]
+        [HttpGet("getVehicles")]
         public async Task<IActionResult> GetAllVehicles()
         {
-            List<Vehicle> vehicles = await Task.FromResult(_vehicleRepository.GetVehicles());
+            List<VehicleDto> vehicles = await Task.FromResult(_mapper.Map<List<VehicleDto>>(_vehicleRepository.GetVehicles()));
             return Ok(vehicles);
         }
 
-        [HttpPost("put")]
+        [HttpPost("addType")]
         public IActionResult CreateVehicleType([FromBody] CreateVehicleTypeDto vehicleTypeDto)
         {
             if (!ModelState.IsValid)
@@ -62,7 +63,6 @@ namespace ProjectAPI.Controllers
             try
             {
                 VehicleType vehicleType = _mapper.Map<VehicleType>(vehicleTypeDto);
-                vehicleType.image = Convert.FromBase64String(vehicleTypeDto.image);
                 _vehicleRepository.SaveVehicleType(vehicleType);
             }
             catch (Exception)
@@ -84,6 +84,27 @@ namespace ProjectAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        [Authorize]
+        [HttpPost("addVehicle"), DisableRequestSizeLimit]
+        public IActionResult AddVehicle([FromBody]CreateVehicleDto createVehicleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                Vehicle vehicle = _mapper.Map<Vehicle>(createVehicleDto);
+                ImageFile image = JsonConvert.DeserializeObject<ImageFile>(createVehicleDto.image.ToString());
+                vehicle.image = Convert.FromBase64String(image.value);
+                _vehicleRepository.Create(vehicle);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Invalid details entered");
+            }
+            return Ok();
         }
 
     }

@@ -32,10 +32,13 @@ namespace Model.Mapper
                 .ForMember(x => x.additionalIdentitfication, opt => opt.Ignore())
                 .ForMember(x => x.id, opt => opt.Ignore())
                 .ForMember(x => x.typeId, opt => opt.Ignore());
-            CreateMap<CreateVehicleTypeDto, VehicleType>()
-                .ForMember(x => x.image, opt => opt.Ignore());
+            CreateMap<CreateVehicleTypeDto, VehicleType>();
             CreateMap<VehicleType, VehicleTypeDto>();
-
+            CreateMap<CreateVehicleDto, Vehicle>()
+                .ForMember(x => x.dayRemoved, opts => opts.Ignore())
+                .ForMember(x => x.type, opts => opts.Ignore())
+                .ForMember(x => x.image, opts => opts.Ignore());
+            CreateMap<Vehicle, VehicleDto>();
         }
     }
 }

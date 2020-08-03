@@ -10,7 +10,6 @@ namespace Model.Models
 
         public double pricePerDay { get; set; }
 
-        public string image { get; set; }
-
+        public int passengers { get; set; }
     }
 }

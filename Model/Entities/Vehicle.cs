@@ -26,9 +26,6 @@ namespace Model.Entities
         [MaxLength(10)]
         public string carCode { get; set; }
 
-        [Required]
-        [MaxLength(15)]
-        public string color { get; set; }
 
         [Required]
         [MaxLength(25)]
@@ -40,6 +37,9 @@ namespace Model.Entities
 
         [Required]
         public bool automatic { get; set; }
+
+        [Required]
+        public byte[] image { get; set; }
 
         [ForeignKey("typeId")]
         public VehicleType type { get; set; }
