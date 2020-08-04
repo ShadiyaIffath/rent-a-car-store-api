@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Model.Models
 {
-    public class VehicleDto
+    public class UpdateVehicleDto
     {
         public int id { get; set; }
 
@@ -24,8 +24,7 @@ namespace Model.Models
 
         public int typeId { get; set; }
 
-        public VehicleTypeDto type { get; set; }
+        public Object image { get; set; }
 
-        public byte[] image { get; set; }
     }
 }

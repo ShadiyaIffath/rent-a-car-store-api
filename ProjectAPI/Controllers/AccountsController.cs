@@ -102,11 +102,5 @@ namespace ProjectAPI.Controllers
 
             return Ok();
         }
-
-        [HttpPost("register")]
-        public IActionResult RegisterAdmin([FromBody]CreateAdminDto adminDto) 
-        {
-            return Ok();
-        }
     }
 }

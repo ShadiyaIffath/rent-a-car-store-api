@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Model.DatabaseContext;
 using Model.Entities;
@@ -22,7 +23,7 @@ namespace Model.Repositories
 
         public List<Vehicle> GetVehicles()
         {
-            return _clientDbContext.Vehicles.ToList();   
+            return _clientDbContext.Vehicles.Include( v => v.type).ToList();   
         }
         public void SaveVehicleType(VehicleType type)
         {

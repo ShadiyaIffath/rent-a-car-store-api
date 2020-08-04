@@ -107,5 +107,25 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
+        [Authorize]
+        [HttpPatch("updateVehicle"), DisableRequestSizeLimit]
+        public IActionResult UpdateVehicle([FromBody]UpdateVehicleDto updateVehicleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                Vehicle vehicle = _mapper.Map<Vehicle>(updateVehicleDto);
+                vehicle.image = Convert.FromBase64String(updateVehicleDto.image.ToString());
+                _vehicleRepository.Update(vehicle);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Invalid details entered");
+            }
+            return Ok();
+        }
     }
 }

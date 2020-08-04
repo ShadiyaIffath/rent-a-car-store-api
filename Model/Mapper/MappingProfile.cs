@@ -12,14 +12,6 @@ namespace Model.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<Account, CreateAdminDto>()
-                .ForMember(x => x.firstName, opts => opts.MapFrom(y => y.firstName))
-                .ForMember(x => x.lastName, opts => opts.MapFrom(y => y.lastName))
-                .ForMember(x => x.email, opts => opts.MapFrom(y => y.email))
-                .ForMember(x => x.phone, opts => opts.MapFrom(y => y.phone))
-                .ForMember(x => x.dob, opts => opts.MapFrom(y => y.dob))
-                .ForMember(x => x.active, opts => opts.MapFrom(y => y.active))
-                .ForMember(x => x.activatedDate, opts => opts.MapFrom(y => y.activatedDate));
             CreateMap<CreateCustomerDto, Account>()
                 .ForMember(x => x.firstName, opts => opts.MapFrom(y => y.firstName))
                 .ForMember(x => x.lastName, opts => opts.MapFrom(y => y.lastName))
@@ -39,6 +31,8 @@ namespace Model.Mapper
                 .ForMember(x => x.type, opts => opts.Ignore())
                 .ForMember(x => x.image, opts => opts.Ignore());
             CreateMap<Vehicle, VehicleDto>();
+            CreateMap<UpdateVehicleDto, Vehicle>()
+                .ForMember(x => x.image, opts => opts.Ignore());
         }
     }
 }
