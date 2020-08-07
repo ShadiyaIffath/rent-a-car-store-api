@@ -36,5 +36,10 @@ namespace Model.Entities
         public Vehicle vehicle { get; set; }
 
         public int vehicleId { get; set; }
+
+        [ForeignKey("accountId")]
+        public Account account { get; set; }
+
+        public int accountId { get; set; }
     }
 }
