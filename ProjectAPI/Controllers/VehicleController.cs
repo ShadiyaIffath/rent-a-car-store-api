@@ -33,17 +33,23 @@ namespace ProjectAPI.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<VehicleController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("getType")]
+        public async Task<IActionResult> GetTypeById(int id)
         {
-            return "value";
-        }
-
-        // POST api/<VehicleController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                VehicleType type = await Task.FromResult(_vehicleRepository.GetVehicleTypeById(id));
+                VehicleTypeDto vehicleType = _mapper.Map<VehicleTypeDto>(type);
+                return Ok(vehicleType);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("getVehicles")]
@@ -107,6 +113,25 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
+        [HttpGet("getVehicle")]
+        public async Task<IActionResult> GetVehicleById(int id)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                Vehicle car = await Task.FromResult(_vehicleRepository.GetVehicleById(id));
+                VehicleDto vehicle = _mapper.Map<VehicleDto>(car);
+                return Ok(vehicle);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [Authorize]
         [HttpPatch("updateVehicle"), DisableRequestSizeLimit]
         public IActionResult UpdateVehicle([FromBody]UpdateVehicleDto updateVehicleDto)
@@ -120,6 +145,25 @@ namespace ProjectAPI.Controllers
                 Vehicle vehicle = _mapper.Map<Vehicle>(updateVehicleDto);
                 vehicle.image = Convert.FromBase64String(updateVehicleDto.image.ToString());
                 _vehicleRepository.Update(vehicle);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Invalid details entered");
+            }
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost("updateVehicleStatus")]
+        public IActionResult RemoveVehicle([FromBody] UpdateStatusVehicleDto updateVehicleDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _vehicleRepository.UpdateVehicleStatus(updateVehicleDto);
             }
             catch (Exception)
             {

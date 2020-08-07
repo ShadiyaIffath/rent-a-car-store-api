@@ -3,11 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Model.DatabaseContext;
 using Model.Entities;
+using Model.Models;
 using Model.Repositories.Base;
 using Model.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Model.Repositories
@@ -51,6 +53,30 @@ namespace Model.Repositories
                 _logger.Log(LogLevel.Error, ex.Message);
             }
             return types;
+        }
+        public void UpdateVehicleStatus(UpdateStatusVehicleDto statusVehicleDto)
+        {
+
+            Vehicle vehicle = _clientDbContext.Vehicles.Where(x => x.id == statusVehicleDto.id).First();
+
+            if (vehicle == null)
+            {
+                throw new NullReferenceException();
+            }
+            vehicle.active = statusVehicleDto.active;
+            vehicle.dayRemoved = statusVehicleDto.dayRemoved;
+            _clientDbContext.SaveChanges();
+
+        }
+
+        public Vehicle GetVehicleById(int id)
+        {
+            return _clientDbContext.Vehicles.First(x => x.id == id);
+        }
+
+        public VehicleType GetVehicleTypeById(int id)
+        {
+            return _clientDbContext.VehicleTypes.First(x => x.id == id);
         }
     }
 }

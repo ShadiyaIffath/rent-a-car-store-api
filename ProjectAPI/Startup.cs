@@ -105,6 +105,7 @@ namespace ProjectAPI
 
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
         }
 
