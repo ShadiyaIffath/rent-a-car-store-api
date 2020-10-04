@@ -23,5 +23,8 @@ namespace Model.DatabaseContext
 
         public DbSet<VehicleBooking> VehicleBookings { get; set; }
 
+        public DbSet<Equipment> Equipments { get; set; }
+
+        public DbSet<EquipmentCategory> EquipmentCategories { get; set; }
     }
 }

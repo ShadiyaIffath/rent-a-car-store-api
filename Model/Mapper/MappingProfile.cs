@@ -33,6 +33,13 @@ namespace Model.Mapper
             CreateMap<Vehicle, VehicleDto>();
             CreateMap<UpdateVehicleDto, Vehicle>()
                 .ForMember(x => x.image, opts => opts.Ignore());
+            CreateMap<CreateBookingDto, VehicleBooking>();
+            CreateMap<CreateEquipmentDto, Equipment>();
+            CreateMap<Equipment, EquipmentDto>();
+            CreateMap<EquipmentCategory, EquipmentCategoryDto>();
+            CreateMap<EquipmentCategoryDto, EquipmentCategory>();
+            CreateMap<CreateCategoryDto, EquipmentCategory>()
+                .ForMember(x => x.image, opts => opts.Ignore());
         }
     }
 }

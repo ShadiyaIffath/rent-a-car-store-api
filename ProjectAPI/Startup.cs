@@ -22,6 +22,7 @@ using Model.Repositories.Interfaces;
 using Newtonsoft.Json.Serialization;
 using ProjectAPI.Interfaces;
 using ProjectAPI.Services;
+using ProjectAPI.Services.Interfaces;
 
 namespace ProjectAPI
 {
@@ -102,11 +103,13 @@ namespace ProjectAPI
 
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
+            services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
 
+            services.AddScoped<IEquipmentService, EquipmentService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
-            services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
+            services.AddScoped<IEquipmentRepository, EquipmentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -68,6 +68,7 @@ namespace Model.Repositories
             account.type = GetAccountType(account.typeId);
             account.EncryptModel();
             Create(account);
+            _logger.LogInformation("Account successfully created");
         }
 
         private AccountType GetAccountType(int id)

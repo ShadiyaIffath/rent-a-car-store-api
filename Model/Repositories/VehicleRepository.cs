@@ -71,7 +71,7 @@ namespace Model.Repositories
 
         public Vehicle GetVehicleById(int id)
         {
-            return _clientDbContext.Vehicles.First(x => x.id == id);
+            return _clientDbContext.Vehicles.Where(x => x.id == id).Include(i=> i.type).First();
         }
 
         public VehicleType GetVehicleTypeById(int id)
