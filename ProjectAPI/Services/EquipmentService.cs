@@ -36,6 +36,7 @@ namespace ProjectAPI.Services
             {
                 Equipment e = _mapper.Map<Equipment>(createEquipment);
                 _equipmentRepository.Create(e);
+                success = true;
                 _logger.LogInformation("Equipment created successfully");
             }
             return success;
@@ -58,6 +59,33 @@ namespace ProjectAPI.Services
             category.image = Convert.FromBase64String(image.value);
             _equipmentRepository.CreateEquipmentCategory(category);
             _logger.LogInformation("Equipment category created successfully");
+        }
+
+        public EquipmentDto GetEquipmentById(int id)
+        {
+            return _mapper.Map<EquipmentDto>(_equipmentRepository.GetEquipmentById(id));
+        }
+
+        public bool UpdateEquipment(EquipmentDto equipmentDto)
+        {
+            bool success = false;
+            if (_equipmentRepository.ValidateNameInUse(equipmentDto.name, equipmentDto.id))
+            {
+                return success;
+            }
+            else
+            {
+                Equipment e = _mapper.Map<Equipment>(equipmentDto);
+                _equipmentRepository.Update(e);
+                success = true;
+                _logger.LogInformation("Equipment created successfully");
+            }
+            return success;
+        }
+
+        public void DeleteEquipment(int id )
+        {
+            _equipmentRepository.DeleteById(id);
         }
     }
 }

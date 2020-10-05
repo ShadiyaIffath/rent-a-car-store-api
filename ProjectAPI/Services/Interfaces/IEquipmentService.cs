@@ -15,5 +15,11 @@ namespace ProjectAPI.Services.Interfaces
         public List<EquipmentDto> GetEquipment();
 
         public void CreateEquipmentCategory(CreateCategoryDto createCategory);
+
+        public EquipmentDto GetEquipmentById(int id);
+
+        public bool UpdateEquipment(EquipmentDto equipmentDto);
+
+        public void DeleteEquipment(int id);
     }
 }

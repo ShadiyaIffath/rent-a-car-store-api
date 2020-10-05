@@ -27,5 +27,7 @@ namespace Model.Entities
 
         [ForeignKey("categoryId")]
         public EquipmentCategory category { get; set; }
+
+        public int categoryId { get; set; }
     }
 }

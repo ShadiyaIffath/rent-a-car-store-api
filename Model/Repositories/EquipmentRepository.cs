@@ -38,12 +38,34 @@ namespace Model.Repositories
 
         public bool ValidateNameInUse(string name)
         {
-            Equipment e = _clientDbContext.Equipments.Where(x => x.name == name).First();
+            Equipment e = _clientDbContext.Equipments.Where(x => x.name == name).FirstOrDefault();
             if(e == null)
             {
                 return false;
             }
             return true;
+        }
+
+        public Equipment GetEquipmentById(int id)
+        {
+            return _clientDbContext.Equipments.Where(x => x.id == id).Include(i => i.category).First();
+        }
+
+        public bool ValidateNameInUse(string name, int id)
+        {
+            Equipment e = _clientDbContext.Equipments.Where(x => x.name == name && x.id != id).FirstOrDefault();
+            if (e == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void DeleteById(int id)
+        {
+            _clientDbContext.Equipments.RemoveRange(_clientDbContext.Equipments.Where(x => x.id == id));
+            _clientDbContext.SaveChanges();
+            _logger.LogInformation("Equipment deleted successfully");
         }
     }
 }

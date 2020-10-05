@@ -13,5 +13,11 @@ namespace Model.Repositories.Interfaces
         List<Equipment> GetEquipment();
 
         void CreateEquipmentCategory(EquipmentCategory equipmentCategory);
+
+        Equipment GetEquipmentById(int id);
+
+        bool ValidateNameInUse(string name, int id);
+
+        void DeleteById(int id);
     }
 }

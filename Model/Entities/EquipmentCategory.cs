@@ -20,7 +20,6 @@ namespace Model.Entities
         public string description { get; set; }
 
         [Required]
-        [MaxLength(25)]
         public byte[] image { get; set; }
 
     }

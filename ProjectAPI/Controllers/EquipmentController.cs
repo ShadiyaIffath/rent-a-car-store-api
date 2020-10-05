@@ -39,13 +39,14 @@ namespace ProjectAPI.Controllers
                     return Conflict("Name already in use");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest("Failed");
             }
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("add-category"), DisableRequestSizeLimit]
         public IActionResult CreateEquipmentCategory([FromBody] CreateCategoryDto createCategory)
         {
@@ -59,11 +60,33 @@ namespace ProjectAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Failed");
+                return BadRequest(ex.Message);
             }
             return Ok();
         }
 
+        [Authorize]
+        [HttpPatch("update-equipment"), DisableRequestSizeLimit]
+        public IActionResult UpdateEquipment([FromBody] EquipmentDto equipmentDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                bool createStatus = _equipmentService.UpdateEquipment(equipmentDto);
+                if (!createStatus)
+                {
+                    return Conflict("Name already in use");
+                }
+            }
+            catch (Exception ex )
+            {
+                return BadRequest(ex.Message);
+            }
+            return Ok();
+        }
 
 
         [HttpGet()]
@@ -78,6 +101,43 @@ namespace ProjectAPI.Controllers
         {
             List<EquipmentCategoryDto> categories = await Task.FromResult(_equipmentService.GetEquipmentCategories());
             return Ok(categories);
+        }
+
+        [HttpGet("get-equipment")]
+        public async Task<IActionResult> GetEquipmentById(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                EquipmentDto dto = await Task.FromResult(_equipmentService.GetEquipmentById(id));
+                return Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("delete-equipment")]
+        public IActionResult DeleteEquipmentById(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+               _equipmentService.DeleteEquipment(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
