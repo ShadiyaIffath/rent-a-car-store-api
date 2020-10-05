@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
 using Model.Models;
 using Model.Repositories.Interfaces;
-using Newtonsoft.Json;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using ProjectAPI.Services.Interfaces;
 
 namespace ProjectAPI.Controllers
 {
@@ -18,22 +16,14 @@ namespace ProjectAPI.Controllers
     [ApiController]
     public class VehicleController : ControllerBase
     {
-        private IVehicleRepository _vehicleRepository;
-        private readonly IMapper _mapper;
+        private IVehicleService _vehicleService;
 
-        public VehicleController(IVehicleRepository vehicleRepository, IMapper mapper)
+        public VehicleController(IVehicleService vehicleService)
         {
-            _vehicleRepository = vehicleRepository;
-            _mapper = mapper;
-        }
-        // GET: api/<VehicleController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+            _vehicleService = vehicleService;
         }
 
-        [HttpGet("getType")]
+        [HttpGet("get-type")]
         public async Task<IActionResult> GetTypeById(int id)
         {
             if (!ModelState.IsValid)
@@ -42,8 +32,7 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                VehicleType type = await Task.FromResult(_vehicleRepository.GetVehicleTypeById(id));
-                VehicleTypeDto vehicleType = _mapper.Map<VehicleTypeDto>(type);
+                VehicleTypeDto vehicleType = await Task.FromResult(_vehicleService.GetVehicleTypeById(id));
                 return Ok(vehicleType);
             }
             catch (Exception ex)
@@ -52,14 +41,14 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [HttpGet("getVehicles")]
+        [HttpGet("get-vehicles")]
         public async Task<IActionResult> GetAllVehicles()
         {
-            List<VehicleDto> vehicles = await Task.FromResult(_mapper.Map<List<VehicleDto>>(_vehicleRepository.GetVehicles()));
+            List<VehicleDto> vehicles = await Task.FromResult(_vehicleService.GetAllVehicles());
             return Ok(vehicles);
         }
 
-        [HttpPost("addType")]
+        [HttpPost("add-type")]
         public IActionResult CreateVehicleType([FromBody] CreateVehicleTypeDto vehicleTypeDto)
         {
             if (!ModelState.IsValid)
@@ -68,8 +57,7 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                VehicleType vehicleType = _mapper.Map<VehicleType>(vehicleTypeDto);
-                _vehicleRepository.SaveVehicleType(vehicleType);
+                _vehicleService.CreateVehicleType(vehicleTypeDto);
             }
             catch (Exception)
             {
@@ -78,12 +66,12 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("getTypes")]
-        public IActionResult GetVehicleTypes()
+        [HttpGet("get-types")]
+        public async Task<IActionResult> GetVehicleTypes()
         {
             try
             {
-                List<VehicleTypeDto> vehicleTypes = _mapper.Map<List<VehicleTypeDto>>(_vehicleRepository.GetVehicleTypes());
+                List<VehicleTypeDto> vehicleTypes = await Task.FromResult(_vehicleService.GetVehicleTypes());
                 return Ok(vehicleTypes);
             }
             catch (Exception ex)
@@ -92,7 +80,7 @@ namespace ProjectAPI.Controllers
             }
         }
         [Authorize]
-        [HttpPost("addVehicle"), DisableRequestSizeLimit]
+        [HttpPost("add-vehicle"), DisableRequestSizeLimit]
         public IActionResult AddVehicle([FromBody]CreateVehicleDto createVehicleDto)
         {
             if (!ModelState.IsValid)
@@ -101,10 +89,7 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                Vehicle vehicle = _mapper.Map<Vehicle>(createVehicleDto);
-                ImageFile image = JsonConvert.DeserializeObject<ImageFile>(createVehicleDto.image.ToString());
-                vehicle.image = Convert.FromBase64String(image.value);
-                _vehicleRepository.Create(vehicle);
+                _vehicleService.AddVehicle(createVehicleDto);
             }
             catch (Exception)
             {
@@ -113,7 +98,7 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("getVehicle")]
+        [HttpGet("get-vehicle")]
         public async Task<IActionResult> GetVehicleById(int id)
         {
             if(!ModelState.IsValid)
@@ -122,8 +107,7 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                Vehicle car = await Task.FromResult(_vehicleRepository.GetVehicleById(id));
-                VehicleDto vehicle = _mapper.Map<VehicleDto>(car);
+                VehicleDto vehicle = await Task.FromResult(_vehicleService.GetVehicleById(id));
                 return Ok(vehicle);
             }
             catch(Exception ex)
@@ -133,7 +117,7 @@ namespace ProjectAPI.Controllers
         }
 
         [Authorize]
-        [HttpPatch("updateVehicle"), DisableRequestSizeLimit]
+        [HttpPatch("update-vehicle"), DisableRequestSizeLimit]
         public IActionResult UpdateVehicle([FromBody]UpdateVehicleDto updateVehicleDto)
         {
             if (!ModelState.IsValid)
@@ -142,9 +126,7 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                Vehicle vehicle = _mapper.Map<Vehicle>(updateVehicleDto);
-                vehicle.image = Convert.FromBase64String(updateVehicleDto.image.ToString());
-                _vehicleRepository.Update(vehicle);
+                _vehicleService.UpdateVehicle(updateVehicleDto);
             }
             catch (Exception)
             {
@@ -154,8 +136,8 @@ namespace ProjectAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost("updateVehicleStatus")]
-        public IActionResult RemoveVehicle([FromBody] UpdateStatusVehicleDto updateVehicleDto)
+        [HttpPost("update-vehicle-status")]
+        public IActionResult UpdateVehicleStatus([FromBody] UpdateStatusVehicleDto updateVehicleDto)
         {
             if (!ModelState.IsValid)
             {
@@ -163,13 +145,32 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                _vehicleRepository.UpdateVehicleStatus(updateVehicleDto);
+                _vehicleService.UpdateVehicleStatus(updateVehicleDto);
             }
             catch (Exception)
             {
                 return BadRequest("Invalid details entered");
             }
             return Ok();
+        }
+
+        [Authorize]
+        [HttpDelete("delete-vehicle")]
+        public IActionResult DeleteVehicleById(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                _vehicleService.DeleteVehicleById(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -19,5 +19,7 @@ namespace Model.Repositories.Interfaces
         public Vehicle GetVehicleById(int id);
 
         public VehicleType GetVehicleTypeById(int id);
+
+        public void DeleteById(int id);
     }
 }

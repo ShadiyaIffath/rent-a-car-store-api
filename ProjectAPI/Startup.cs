@@ -44,7 +44,7 @@ namespace ProjectAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options=>
+            services.AddCors(options =>
             {
                 options.AddPolicy("EnableCORS", builder =>
                 {
@@ -106,6 +106,7 @@ namespace ProjectAPI
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
 
             services.AddScoped<IEquipmentService, EquipmentService>();
+            services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();

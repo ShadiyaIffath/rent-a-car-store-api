@@ -66,7 +66,7 @@ namespace Model.Repositories
             vehicle.active = statusVehicleDto.active;
             vehicle.dayRemoved = statusVehicleDto.dayRemoved;
             _clientDbContext.SaveChanges();
-
+            _logger.LogInformation("Vehicle status updated");
         }
 
         public Vehicle GetVehicleById(int id)
@@ -77,6 +77,13 @@ namespace Model.Repositories
         public VehicleType GetVehicleTypeById(int id)
         {
             return _clientDbContext.VehicleTypes.First(x => x.id == id);
+        }
+
+        public void DeleteById(int id)
+        {
+            _clientDbContext.Vehicles.RemoveRange(_clientDbContext.Vehicles.Where(x => x.id == id));
+            _clientDbContext.SaveChanges();
+            _logger.LogInformation("Vehicle deleted successfully");
         }
     }
 }
