@@ -14,5 +14,11 @@ namespace Model.Repositories.Interfaces
         void createCustomerAccount(Account account);
 
         int getAccountId(string email);
+
+        List<Account> getAccounts();
+
+        void DeleteById(int id);
+
+        void UpdateAccountStatus(int id, bool status);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Model.DatabaseContext;
 using Model.Entities;
 using Model.Enums;
@@ -90,6 +91,36 @@ namespace Model.Repositories
                 }
             }
             return id;
+        }
+
+        public List<Account> getAccounts()
+        {
+            List<Account> accounts = _clientDbContext.Accounts.ToList<Account>();
+            foreach (Account ac in accounts)
+            {
+                ac.DecryptModel();
+            }
+            return accounts;
+        }
+
+        public void DeleteById(int id)
+        {
+            _clientDbContext.Accounts.RemoveRange(_clientDbContext.Accounts.Where(x => x.id == id));
+            _clientDbContext.SaveChanges();
+            _logger.LogInformation("Account deleted successfully");
+        }
+
+        public void UpdateAccountStatus(int id, bool status)
+        {
+            Account account = _clientDbContext.Accounts.Where(x => x.id == id).FirstOrDefault();
+
+            if (account == null)
+            {
+                throw new NullReferenceException();
+            }
+            account.active = status;
+            _clientDbContext.SaveChanges();
+            _logger.LogInformation("Account status updated");
         }
     }
 }

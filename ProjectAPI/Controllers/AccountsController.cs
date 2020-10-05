@@ -15,6 +15,7 @@ using Model.Repositories;
 using Model.Repositories.Interfaces;
 using Newtonsoft.Json;
 using ProjectAPI.Interfaces;
+using ProjectAPI.Services.Interfaces;
 
 namespace ProjectAPI.Controllers
 {
@@ -23,52 +24,24 @@ namespace ProjectAPI.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private IAccountRepository _accountRepository;
-        private IJwtAuthenticationManager _jwtAuthenticationManager;
-        private readonly IMapper _mapper;
-        public AccountsController(IAccountRepository accountRepository, IJwtAuthenticationManager authenticationManager,
-            IMapper mapper)
-        {
-            _accountRepository = accountRepository;
-            _jwtAuthenticationManager = authenticationManager;
-            _mapper = mapper;
-        }
-        // GET: api/<AccountsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        private IAccountService _accountService;
 
-        // GET api/<AccountsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        public AccountsController( IAccountService accountService)
         {
-            return "value";
+            _accountService = accountService;
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]LoginDto logincredentials)
+        public IActionResult Authenticate([FromBody] LoginDto logincredentials)
         {
-            
-            string loggedIn = _accountRepository.login(logincredentials.email, logincredentials.password);
-
-            if (loggedIn != null)
+            var token = _accountService.AuthenticateUser(logincredentials);
+            if (token == null)
             {
-                int id = _accountRepository.getAccountId(logincredentials.email);
-                var token =  _jwtAuthenticationManager.Authenticate(logincredentials.email, loggedIn, id);
-
-                if(token == null)
-                {
-                    return Unauthorized();
-                }
-                return Ok(token);
+                return Unauthorized();
             }
-            return Unauthorized();
+            return Ok(token);
         }
-
-
 
         [AllowAnonymous]
         [HttpPost("signup"), DisableRequestSizeLimit]
@@ -77,29 +50,67 @@ namespace ProjectAPI.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
-            if (_accountRepository.validateEmailInUse(customerDto.email))
-            {
-                return Conflict("Email in use");
-            }
-            
-            Account account = new Account();
+            }        
             try
             {
-                account = _mapper.Map<Account>(customerDto);
-                ImageFile drivingLicense = JsonConvert.DeserializeObject<ImageFile>(customerDto.drivingLicense.ToString());
-                account.drivingLicense = Convert.FromBase64String(drivingLicense.value);
-
-                ImageFile additionalIdentification = JsonConvert.DeserializeObject<ImageFile>(customerDto.additionalIdentification.ToString());
-                account.additionalIdentitfication = Convert.FromBase64String(additionalIdentification.value);
+                if (_accountService.RegisterUser(customerDto))
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return Conflict("Email in use");
+                }
             }
             catch (Exception)
             {
                 return BadRequest("Invalid driving license or identificcation");
+            }          
+        }
+
+        [Authorize]
+        [HttpGet("get-accounts")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            List<AccountDto> accounts = await Task.FromResult(_accountService.GetAccounts());
+            return Ok(accounts);
+        }
+
+        [Authorize]
+        [HttpDelete("delete-account")]
+        public IActionResult DeleteAccountById(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
             }
+            try
+            {
+                _accountService.DeleteAccountById(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-             _accountRepository.createCustomerAccount(account);
-
+        [Authorize]
+        [HttpPatch("update-account-status")]
+        public IActionResult UpdateAccountStatus([FromBody]AccountDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _accountService.UpdateAccountStatus(dto.id, dto.active);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Update Failed" + ex.Message);
+            }
             return Ok();
         }
     }

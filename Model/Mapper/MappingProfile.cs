@@ -41,6 +41,7 @@ namespace Model.Mapper
             CreateMap<EquipmentDto, Equipment>();
             CreateMap<CreateCategoryDto, EquipmentCategory>()
                 .ForMember(x => x.image, opts => opts.Ignore());
+            CreateMap<Account, AccountDto>();
         }
     }
 }

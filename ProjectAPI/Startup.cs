@@ -105,6 +105,7 @@ namespace ProjectAPI
             services.AddSingleton(mapper);
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
 
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEquipmentService, EquipmentService>();
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
