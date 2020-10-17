@@ -22,5 +22,8 @@ namespace Model.Entities
         [Required]
         public byte[] image { get; set; }
 
+        [Required]
+        public int price { get; set; }
+
     }
 }

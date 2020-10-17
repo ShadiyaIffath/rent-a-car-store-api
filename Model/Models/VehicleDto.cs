@@ -27,5 +27,9 @@ namespace Model.Models
         public VehicleTypeDto type { get; set; }
 
         public byte[] image { get; set; }
+
+        public int engineCapacity { get; set; }
+
+        public int fuelConsumption { get; set; }
     }
 }

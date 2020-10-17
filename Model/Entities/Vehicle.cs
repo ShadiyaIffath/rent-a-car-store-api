@@ -41,6 +41,12 @@ namespace Model.Entities
         [Required]
         public byte[] image { get; set; }
 
+        [Required]
+        public int fuelConsumption { get; set; }
+
+        [Required]
+        public int engineCapacity { get; set; }
+
         [ForeignKey("typeId")]
         public VehicleType type { get; set; }
 

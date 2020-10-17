@@ -14,5 +14,7 @@ namespace Model.Models
         public string description { get; set; }
 
         public byte[] image { get; set; }
+
+        public int price { get; set; }
     }
 }

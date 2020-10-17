@@ -21,5 +21,9 @@ namespace Model.Models
         public Object image { get; set; }
 
         public int typeId { get; set; }
+
+        public int engineCapacity { get; set; }
+
+        public int fuelConsumption { get; set; }
     }
 }
