@@ -7,7 +7,7 @@ namespace Model.Repositories.Interfaces
 {
     public interface IAccountRepository : IRepositoryBase<Account>
     {
-        string login(string email, string password);
+        Account login(string email, string password);
 
         bool validateEmailInUse(string email);
 
@@ -20,5 +20,7 @@ namespace Model.Repositories.Interfaces
         void DeleteById(int id);
 
         void UpdateAccountStatus(int id, bool status);
+
+        Account GetAccountById(int id);
     }
 }

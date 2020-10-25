@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Model.DatabaseContext;
 using Model.Mapper;
+using Model.Models.MailService;
 using Model.Repositories;
 using Model.Repositories.Interfaces;
 using Newtonsoft.Json.Serialization;
@@ -59,7 +60,7 @@ namespace ProjectAPI
                     jsonOptions.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 });
             services.Configure<string>(Startup.configuration.GetSection(""));
-
+            services.Configure<MailSettings>(Startup.configuration.GetSection("AppSettings:MailSettings"));
             var systemConnectionString = Startup.configuration["AppSettings:ConnectionString"];
             var key = Startup.configuration["AppSettings:JwtKey"];
 
@@ -104,14 +105,16 @@ namespace ProjectAPI
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
-
+            services.AddTransient<IMailService, Services.MailService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEquipmentService, EquipmentService>();
             services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
-            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IVehicleBookingRepository, VehicleBookingRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+            services.AddScoped<IEquipmentBookingRepository, EquipmentBookingRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -26,5 +26,7 @@ namespace Model.DatabaseContext
         public DbSet<Equipment> Equipments { get; set; }
 
         public DbSet<EquipmentCategory> EquipmentCategories { get; set; }
+
+        public DbSet<EquipmentBooking> EquipmentBookings { get; set; }
     }
 }

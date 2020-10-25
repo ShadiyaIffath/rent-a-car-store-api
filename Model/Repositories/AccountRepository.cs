@@ -22,21 +22,20 @@ namespace Model.Repositories
             _logger = logger;
         }
 
-        public string login(string email , string password)
+        public Account login(string email , string password)
         {
-            string valid = null;
+            Account valid = null;
             try
             {
-                List<Account> accounts = _clientDbContext.Accounts.ToList<Account>();
+                List<Account> accounts = _clientDbContext.Accounts.Include(a => a.type).ToList<Account>();
 
                 foreach (Account ac in accounts)
                 {
-                    ac.email = EncryptUtil.DecryptString(ac.email);
-                    ac.password = EncryptUtil.DecryptString(ac.password);
+                    ac.DecryptModel();
 
                     if (ac.email == email && ac.password == password)
                     {
-                        valid = _clientDbContext.AccountTypes.Where(x => x.id == ac.typeId).Select(s => s.type).First();
+                        valid = ac;
                         break;
                     }
                 }
@@ -84,8 +83,8 @@ namespace Model.Repositories
 
             foreach (Account ac in accounts)
             {
-                ac.email = EncryptUtil.DecryptString(ac.email);
-                if (ac.email == email)
+                ac.DecryptModel();
+                if (ac.email.Equals(email))
                 {
                     id = ac.id;
                 }
@@ -121,6 +120,11 @@ namespace Model.Repositories
             account.active = status;
             _clientDbContext.SaveChanges();
             _logger.LogInformation("Account status updated");
+        }
+
+        public Account GetAccountById(int id)
+        {
+            return _clientDbContext.Accounts.Where(x => x.id == id).FirstOrDefault();
         }
     }
 }

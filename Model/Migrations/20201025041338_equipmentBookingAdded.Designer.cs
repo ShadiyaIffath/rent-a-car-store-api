@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Model.DatabaseContext;
 
 namespace Model.Migrations
 {
     [DbContext(typeof(ClientDbContext))]
-    partial class ClientDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201025041338_equipmentBookingAdded")]
+    partial class equipmentBookingAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,39 +124,6 @@ namespace Model.Migrations
                     b.HasIndex("categoryId");
 
                     b.ToTable("Equipments");
-                });
-
-            modelBuilder.Entity("Model.Entities.EquipmentBooking", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("createdOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("equipmentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("startTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
-
-                    b.Property<int>("vehicleBookingId")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("equipmentId");
-
-                    b.HasIndex("vehicleBookingId");
-
-                    b.ToTable("EquipmentBookings");
                 });
 
             modelBuilder.Entity("Model.Entities.EquipmentCategory", b =>
@@ -320,21 +289,6 @@ namespace Model.Migrations
                     b.HasOne("Model.Entities.EquipmentCategory", "category")
                         .WithMany()
                         .HasForeignKey("categoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Model.Entities.EquipmentBooking", b =>
-                {
-                    b.HasOne("Model.Entities.Equipment", "equipment")
-                        .WithMany()
-                        .HasForeignKey("equipmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Model.Entities.VehicleBooking", "vehicleBooking")
-                        .WithMany()
-                        .HasForeignKey("vehicleBookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -23,5 +23,9 @@ namespace Model.Models
         public DateTime activatedDate { get; set; }
 
         public int typeId { get; set; }
+
+        public byte[] drivingLicense { get; set; }
+
+        public byte[] additionalIdentitfication { get; set; }
     }
 }

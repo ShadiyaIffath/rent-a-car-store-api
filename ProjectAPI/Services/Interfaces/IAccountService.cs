@@ -17,5 +17,7 @@ namespace ProjectAPI.Services.Interfaces
         void DeleteAccountById(int id);
 
         void UpdateAccountStatus(int id, bool status);
+
+        AccountDto GetAccountById(int id);
     }
 }

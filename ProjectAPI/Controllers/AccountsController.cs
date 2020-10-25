@@ -113,5 +113,20 @@ namespace ProjectAPI.Controllers
             }
             return Ok();
         }
+
+        [Authorize]
+        [HttpGet("get-account")]
+        public async Task<IActionResult> GetAccountDetails(int id)
+        {
+            try
+            {
+                AccountDto account = await Task.FromResult(_accountService.GetAccountById(id));
+                return Ok(account);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
