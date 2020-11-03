@@ -21,6 +21,8 @@ namespace Model.Models
 
         public bool active { get; set; }
 
+        public bool loyal { get; set; }
+
         public DateTime activatedDate { get; set; }
 
         public Object additionalIdentification { get; set; }

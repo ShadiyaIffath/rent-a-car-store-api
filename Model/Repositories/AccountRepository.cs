@@ -8,6 +8,7 @@ using Model.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using UtilityLibrary.Utils;
@@ -105,6 +106,8 @@ namespace Model.Repositories
         public void DeleteById(int id)
         {
             _clientDbContext.Accounts.RemoveRange(_clientDbContext.Accounts.Where(x => x.id == id));
+            _clientDbContext.VehicleBookings.RemoveRange(_clientDbContext.VehicleBookings.Where(x => x.account.id == id));
+            _clientDbContext.EquipmentBookings.RemoveRange(_clientDbContext.EquipmentBookings.Where(x => x.vehicleBooking.account.id == id));
             _clientDbContext.SaveChanges();
             _logger.LogInformation("Account deleted successfully");
         }
@@ -119,6 +122,11 @@ namespace Model.Repositories
             }
             account.active = status;
             _clientDbContext.SaveChanges();
+            if (status == false)
+            {
+                (from v in _clientDbContext.VehicleBookings where v.account.id == id select v).ToList().ForEach(s => s.status = "Cancelled");
+                _clientDbContext.SaveChanges();
+            }
             _logger.LogInformation("Account status updated");
         }
 

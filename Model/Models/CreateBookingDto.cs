@@ -8,7 +8,7 @@ namespace Model.Models
     {
         public VehicleBookingDto vehicleBooking  { get; set; }
 
-        public List<EquipmentBookingDto> equipmentBookings { get; set; }
+        public List<CreateEquipmentBookingDto> equipmentBookings { get; set; }
 
     }
 }

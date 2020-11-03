@@ -1,11 +1,10 @@
-﻿using Model.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Model.Models
 {
-    public class VehicleBookingDto
+    public class UpdateVehicleBookingDto
     {
         public int id { get; set; }
 
@@ -23,11 +22,6 @@ namespace Model.Models
 
         public int vehicleId { get; set; }
 
-        public VehicleDto vehicle { get; set; }
-
         public int accountId { get; set; }
-
-        public AccountDto account { get; set; }
-
     }
 }

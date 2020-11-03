@@ -26,15 +26,19 @@ namespace Model.Mapper
                 .ForMember(x => x.typeId, opt => opt.Ignore());
             CreateMap<CreateVehicleTypeDto, VehicleType>();
             CreateMap<VehicleType, VehicleTypeDto>();
+            CreateMap<VehicleTypeDto, VehicleType>();
             CreateMap<CreateVehicleDto, Vehicle>()
                 .ForMember(x => x.dayRemoved, opts => opts.Ignore())
                 .ForMember(x => x.type, opts => opts.Ignore())
                 .ForMember(x => x.image, opts => opts.Ignore());
             CreateMap<Vehicle, VehicleDto>();
+            CreateMap<VehicleDto, Vehicle>();
             CreateMap<UpdateVehicleDto, Vehicle>()
                 .ForMember(x => x.image, opts => opts.Ignore());
             CreateMap<VehicleBookingDto, VehicleBooking>();
+            CreateMap<VehicleBooking, VehicleBookingDto>();
             CreateMap<EquipmentBookingDto, EquipmentBooking>();
+            CreateMap<EquipmentBooking, EquipmentBookingDto>();
             CreateMap<EquipmentCategory, EquipmentCategoryDto>();
             CreateMap<EquipmentCategoryDto, EquipmentCategory>();
             CreateMap<CreateEquipmentDto, Equipment>();
@@ -42,7 +46,11 @@ namespace Model.Mapper
             CreateMap<EquipmentDto, Equipment>();
             CreateMap<CreateCategoryDto, EquipmentCategory>()
                 .ForMember(x => x.image, opts => opts.Ignore());
+            CreateMap<CreateEquipmentBookingDto, EquipmentBooking>();
             CreateMap<Account, AccountDto>();
+            CreateMap<AccountDto, Account>();
+            CreateMap<UpdateEquipmentBookingDto, EquipmentBooking>();
+            CreateMap<UpdateVehicleBookingDto, VehicleBooking>();
         }
     }
 }

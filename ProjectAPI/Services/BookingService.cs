@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
+using Model.Migrations;
 using Model.Models;
 using Model.Repositories;
 using Model.Repositories.Interfaces;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 using ProjectAPI.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -68,9 +71,9 @@ namespace ProjectAPI.Services
                 foreach (var e in equipmentBookings)
                 {
                     e.vehicleBookingId = vehicle.id;
-                    _equipmentBookingRepository.Create(e);
-                    _logger.LogInformation("Equipment booking created");
                 }
+                _equipmentBookingRepository.CreateEquipmentBooking(equipmentBookings);
+                _logger.LogInformation("Equipment booking created");
             }
             catch(Exception ex)
             {
@@ -90,6 +93,94 @@ namespace ProjectAPI.Services
                 Body = body
             };
             _mailService.SendEmailAsync(mail);
+        }
+
+        public List<BookingDto> GetAllBookings()
+        {
+            List<BookingDto> dto = new List<BookingDto>();
+            List <VehicleBooking> vehicleBookings = _vehicleBookingRepository.GetBookings();
+            List<EquipmentBookingDto> equipmentBookings;
+
+            foreach(var x in vehicleBookings)
+            {
+                x.account.DecryptModel();
+                equipmentBookings = new List<EquipmentBookingDto>();
+                equipmentBookings.AddRange(_mapper.Map < List < EquipmentBookingDto>>(_equipmentBookingRepository.GetEquipmentBookingsFromBooking(x.id)));
+                dto.Add(new BookingDto
+                {
+                    vehicleBooking = _mapper.Map<VehicleBookingDto>(x),
+                    equipmentBookings = equipmentBookings
+                });
+            }
+
+            return dto;
+        }
+
+        public void DeleteBooking(int id)
+        {
+            _vehicleBookingRepository.DeleteBooking(id);
+            _logger.LogInformation("Booking #"+id+" deleted successfully");
+        }
+
+        public bool ValidateBooking(UpdateBookingDto dto)
+        {
+            if(validateVehicleAvailability(dto.vehicleBooking.id, dto.vehicleBooking.startTime,
+                    dto.vehicleBooking.endTime, dto.vehicleBooking.vehicleId) == false)
+            {
+                return false;
+            }
+
+            foreach(var e in dto.equipmentBookings)
+            {
+                List<EquipmentBooking> bookings = _equipmentBookingRepository.validateRange(e.id, e.startTime, e.endTime, e.equipmentId);
+                if (bookings.Count != 0)
+                {
+                    return false;
+                }
+            }
+            return true;          
+        }
+
+        public void UpdateBooking(UpdateBookingDto dto)
+        {
+            _vehicleBookingRepository.Update(_mapper.Map<VehicleBooking>(dto.vehicleBooking));
+            List<EquipmentBooking> bookings = _mapper.Map<List<EquipmentBooking>>(dto.equipmentBookings);
+            List<int> ids = new List<int>();
+
+            foreach ( var e in bookings)
+            {
+                if ( e.id != 0)
+                {
+                    _equipmentBookingRepository.Update(e);
+                }
+                else
+                {
+                    _equipmentBookingRepository.Create(e);
+                }
+                ids.Add(e.id);
+            }
+
+            _equipmentBookingRepository.RemoveEquipmentsInBookingById(ids, dto.vehicleBooking.id);
+
+            _logger.LogInformation("Booking successfully updated");
+        }
+
+        public void UpdateBookingStatus(int bookingId, string status)
+        {
+            _vehicleBookingRepository.UpdateBookingStatus(bookingId, status);
+        }
+
+        public BookingDto GetBooking(int id)
+        {
+            VehicleBooking vehicle = _vehicleBookingRepository.GetVehicleBooking(id);
+            vehicle.account.DecryptModel();
+            BookingDto dto = new BookingDto()
+            {
+                vehicleBooking = _mapper.Map<VehicleBookingDto>(vehicle),
+                equipmentBookings = _mapper.Map<List<EquipmentBookingDto>>(_equipmentBookingRepository.GetEquipmentBookingsFromBooking(id))
+            };
+
+            return dto;
         }
     }
 }

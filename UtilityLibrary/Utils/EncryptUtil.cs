@@ -88,9 +88,9 @@ namespace UtilityLibrary.Utils
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return string.Empty;
+                return cipherText;
             }
         }
 

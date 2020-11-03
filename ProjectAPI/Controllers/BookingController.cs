@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
+using Model.Enums;
 using Model.Models;
 using Model.Repositories.Interfaces;
 using ProjectAPI.Services.Interfaces;
@@ -28,7 +29,7 @@ namespace ProjectAPI.Controllers
         }
 
         [HttpPost("validate-booking")]
-        public IActionResult ValidateBookingRange([FromBody] BookingDto bookingDto)
+        public async Task<IActionResult> ValidateBookingRange([FromBody] VehicleBookingDto bookingDto)
         {
             if (!ModelState.IsValid)
             {
@@ -36,7 +37,9 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                if(_bookingService.validateVehicleAvailability(bookingDto.id,bookingDto.startTime, bookingDto.endTime, bookingDto.vehicleId)== true)
+                bool valid = await Task.FromResult(_bookingService.validateVehicleAvailability(bookingDto.id,
+                    bookingDto.startTime, bookingDto.endTime, bookingDto.vehicleId));
+                if (valid == true)
                 {
                     return Ok();
                 }
@@ -49,7 +52,7 @@ namespace ProjectAPI.Controllers
         }
 
         [HttpPost("get-available-equipment")]
-        public IActionResult GetAvailableEquipment([FromBody] BookingDto bookingDto)
+        public async Task<IActionResult> GetAvailableEquipment([FromBody] VehicleBookingDto bookingDto)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +60,7 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                List<EquipmentDto> equipment = _bookingService.GetEquipmentAvailable(bookingDto.id, bookingDto.startTime, bookingDto.endTime);
+                List<EquipmentDto> equipment = await Task.FromResult(_bookingService.GetEquipmentAvailable(bookingDto.id, bookingDto.startTime, bookingDto.endTime));
 
                 return Ok(equipment);
             }
@@ -84,5 +87,104 @@ namespace ProjectAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        
+        [HttpGet("all-bookings")]
+        public async Task<IActionResult> GetAllBookings()
+        {
+            try
+            {
+                return Ok(await Task.FromResult(_bookingService.GetAllBookings()));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("delete-booking")]
+        public IActionResult DeleteBooking(int id)
+        {
+            try
+            {
+                _bookingService.DeleteBooking(id);
+                return Ok();
+
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("update-booking")]
+        public IActionResult UpdateBooking([FromBody] UpdateBookingDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                if (dto.vehicleBooking.status != "Confirmed")
+                {
+                    _bookingService.UpdateBookingStatus(dto.vehicleBooking.id, dto.vehicleBooking.status);
+                    return Ok();
+                }
+                if(_bookingService.ValidateBooking(dto) == false)
+                {
+                    return Conflict();
+                }
+
+                _bookingService.UpdateBooking(dto);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPatch("update-status")]
+        public IActionResult UpdateStatus([FromBody] UpdateBookingDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                if (dto.vehicleBooking.status != "Confirmed")
+                {
+                    _bookingService.UpdateBookingStatus(dto.vehicleBooking.id, dto.vehicleBooking.status);
+                    return Ok();
+                }
+                if (_bookingService.ValidateBooking(dto) == false)
+                {
+                    return Conflict();
+                }
+                _bookingService.UpdateBooking(dto);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [HttpGet("get-booking")]
+        public async Task<IActionResult> GetBookingById(int id)
+        {
+            try
+            {
+                BookingDto booking = await Task.FromResult(_bookingService.GetBooking(id));
+                return Ok(booking);
+
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

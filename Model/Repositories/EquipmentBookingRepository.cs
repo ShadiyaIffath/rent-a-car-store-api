@@ -26,13 +26,13 @@ namespace Model.Repositories
         {
             List<EquipmentBooking> bookings = new List<EquipmentBooking>();
             //new booking duration validation
-            if (id == null)
+            if (id == 0)
             {
-                bookings = _clientDbContext.EquipmentBookings.Where(x => x.equipment.id == equipmentId && x.status == "Confirmed" && (start > x.vehicleBooking.endTime || end < x.startTime)).ToList();
-            }//existing booking duration validation
+                bookings = _clientDbContext.EquipmentBookings.Where(x => x.equipment.id == equipmentId && x.vehicleBooking.status == "Confirmed" && ((x.startTime <= start && x.vehicleBooking.endTime >= start) || (x.startTime <= end && x.vehicleBooking.endTime >= end ))).ToList();
+            }//existing booking duration validation       
             else
             {
-                bookings = _clientDbContext.EquipmentBookings.Where(x => x.equipment.id == equipmentId && x.id != id && x.status == "Confirmed" && (start > x.vehicleBooking.endTime || end < x.startTime)).ToList();
+                bookings = _clientDbContext.EquipmentBookings.Where(x => x.equipment.id == equipmentId && x.id != id && x.vehicleBooking.status == "Confirmed" && ((x.startTime <= start && x.vehicleBooking.endTime >= start) || (x.startTime <= end && x.vehicleBooking.endTime >= end))).ToList();
             }
             return bookings;
         }
@@ -41,30 +41,27 @@ namespace Model.Repositories
         {
             List<Equipment> allEquipment = _clientDbContext.Equipments.Include(x => x.category).ToList();
             List<Equipment> equipments = new List<Equipment>();
+            List<int> ids = new List<int>();
             if (id == 0)
             {
-                var ids = _clientDbContext.EquipmentBookings
-                          .Where(s => s.status == "Confirmed" && ((s.startTime <= start && s.vehicleBooking.endTime >= start) || (s.startTime <= end && s.vehicleBooking.endTime >= end)))
-                          .Select(x => x.equipment.id).Distinct().ToList();
-
-                foreach (var e in allEquipment)
-                {
-                    foreach (var i in ids)
-                    {
-                        if (e.id != i)
-                        {
-                            equipments.Add(e);
-                        }
-                    }
-
-                }
+                ids = _clientDbContext.EquipmentBookings
+                          .Where(s => s.vehicleBooking.status == "Confirmed" && ((s.startTime <= start && s.vehicleBooking.endTime >= start) || (s.startTime <= end && s.vehicleBooking.endTime >= end)))
+                          .Select(x => x.equipment.id).ToList();
             }
             else
             {
-                var ids = _clientDbContext.EquipmentBookings
-                          .Where(s => s.status == "Confirmed" && s.vehicleBooking.id != id &&
+                ids = _clientDbContext.EquipmentBookings
+                          .Where(s => s.vehicleBooking.status == "Confirmed" && s.vehicleBooking.id != id &&
                            ((s.startTime <= start && s.vehicleBooking.endTime >= start) || (s.startTime <= end && s.vehicleBooking.endTime >= end)))
-                          .Select(x => x.id).Distinct().ToList();
+                          .Select(x => x.id).ToList();
+            }
+
+            if (ids.Count == 0)
+            {
+                equipments = allEquipment;
+            }
+            else
+            {
                 foreach (var e in allEquipment)
                 {
                     foreach (var i in ids)
@@ -75,8 +72,43 @@ namespace Model.Repositories
                         }
                     }
                 }
-            }           
+            }
             return equipments;
+        }
+
+        public List<EquipmentBooking> GetEquipmentBookingsFromBooking(int id)
+        {
+            return _clientDbContext.EquipmentBookings
+                .Include(a => a.equipment).ThenInclude(b => b.category).Where(x => x.vehicleBooking.id == id).ToList();
+        }
+
+        public void CreateEquipmentBooking(List<EquipmentBooking> equipmentBookings)
+        {
+            _clientDbContext.EquipmentBookings.AddRange(equipmentBookings);
+            _clientDbContext.SaveChanges();
+        }
+
+        public void RemoveEquipmentsInBookingById(List<int> ids, int booking)
+        {
+            List<EquipmentBooking> bookings = _clientDbContext.EquipmentBookings.Where(x => x.vehicleBooking.id == booking).ToList();
+
+            foreach (var e in bookings)
+            {
+                var exist = false;
+                foreach (var i in ids)
+                {
+                    if (e.id == i)
+                    {
+                        exist = true;
+                    }
+                }
+
+                if (!exist)
+                {
+                    _clientDbContext.EquipmentBookings.Remove(e);
+                    _clientDbContext.SaveChanges();
+                }
+            }
         }
     }
 }

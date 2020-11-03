@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Text;
 
 namespace Model.Models
 {
-    public class EquipmentBookingDto
+    public class UpdateEquipmentBookingDto
     {
         public int id { get; set; }
 
@@ -17,10 +16,6 @@ namespace Model.Models
 
         public int equipmentId { get; set; }
 
-        public EquipmentDto equipment { get; set; }
-
         public int vehicleBookingId { get; set; }
-
-        public VehicleBookingDto vehicleBooking { get; set; }
     }
 }

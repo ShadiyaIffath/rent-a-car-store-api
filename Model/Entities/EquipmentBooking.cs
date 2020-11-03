@@ -18,10 +18,6 @@ namespace Model.Entities
         [Required]
         public DateTime createdOn { get; set; }
 
-        [Required]
-        [MaxLength(10)]
-        public string status { get; set; }
-
         [ForeignKey("equipmentId")]
         public Equipment equipment { get; set; }
 
