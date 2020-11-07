@@ -116,6 +116,27 @@ namespace ProjectAPI.Services
             return dto;
         }
 
+        public List<BookingDto> GetUserBookings(int id)
+        {
+            List<BookingDto> dto = new List<BookingDto>();
+            List<VehicleBooking> vehicleBookings = _vehicleBookingRepository.GetUserBookings(id);
+            List<EquipmentBookingDto> equipmentBookings;
+
+            foreach (var x in vehicleBookings)
+            {
+                x.account.DecryptModel();
+                equipmentBookings = new List<EquipmentBookingDto>();
+                equipmentBookings.AddRange(_mapper.Map<List<EquipmentBookingDto>>(_equipmentBookingRepository.GetEquipmentBookingsFromBooking(x.id)));
+                dto.Add(new BookingDto
+                {
+                    vehicleBooking = _mapper.Map<VehicleBookingDto>(x),
+                    equipmentBookings = equipmentBookings
+                });
+            }
+
+            return dto;
+        }
+
         public void DeleteBooking(int id)
         {
             _vehicleBookingRepository.DeleteBooking(id);

@@ -1,5 +1,6 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Model.Models;
@@ -16,9 +17,20 @@ namespace ProjectAPI.Services
     public class MailService : IMailService
     {
         private readonly MailSettings _mailSettings;
-        public MailService(IOptions<MailSettings> mailSettings)
+        public MailService(IConfiguration iConfiguration)
         {
-            _mailSettings = mailSettings.Value;
+            var mailSettings = iConfiguration.GetSection("MailSettings");
+            if(mailSettings != null)
+            {
+                _mailSettings = new MailSettings
+                {
+                    DisplayName = mailSettings.GetSection("DisplayName").Value,
+                    Host = mailSettings.GetSection("Host").Value,
+                    Mail = mailSettings.GetSection("Mail").Value,
+                    Password = mailSettings.GetSection("Password").Value,
+                    Port = int.Parse(mailSettings.GetSection("Port").Value)
+                };
+            }
         }
 
         public async Task SendEmailAsync(MailRequest mailRequest)

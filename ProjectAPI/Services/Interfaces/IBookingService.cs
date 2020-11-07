@@ -25,5 +25,7 @@ namespace ProjectAPI.Services.Interfaces
         public void UpdateBookingStatus(int bookingId, string status);
 
         public BookingDto GetBooking(int id);
+
+        public List<BookingDto> GetUserBookings(int id);
     }
 }

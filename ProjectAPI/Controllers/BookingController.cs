@@ -127,8 +127,11 @@ namespace ProjectAPI.Controllers
             {
                 if (dto.vehicleBooking.status != "Confirmed")
                 {
-                    _bookingService.UpdateBookingStatus(dto.vehicleBooking.id, dto.vehicleBooking.status);
-                    return Ok();
+                    if (dto.vehicleBooking.status != "Collected")
+                    {
+                        _bookingService.UpdateBookingStatus(dto.vehicleBooking.id, dto.vehicleBooking.status);
+                        return Ok();
+                    }
                 }
                 if(_bookingService.ValidateBooking(dto) == false)
                 {
@@ -155,8 +158,11 @@ namespace ProjectAPI.Controllers
             {
                 if (dto.vehicleBooking.status != "Confirmed")
                 {
-                    _bookingService.UpdateBookingStatus(dto.vehicleBooking.id, dto.vehicleBooking.status);
-                    return Ok();
+                    if (dto.vehicleBooking.status != "Collected")
+                    {
+                        _bookingService.UpdateBookingStatus(dto.vehicleBooking.id, dto.vehicleBooking.status);
+                        return Ok();
+                    }
                 }
                 if (_bookingService.ValidateBooking(dto) == false)
                 {
@@ -181,6 +187,20 @@ namespace ProjectAPI.Controllers
 
             }
             catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("user-bookings")]
+        public async Task<IActionResult> GetUserBookings(int id)
+        {
+            try
+            {
+                List<BookingDto> bookings = await Task.FromResult(_bookingService.GetUserBookings(id));
+                return Ok(bookings);
+
+            }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

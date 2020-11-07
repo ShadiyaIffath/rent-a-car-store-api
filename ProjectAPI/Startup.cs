@@ -60,7 +60,6 @@ namespace ProjectAPI
                     jsonOptions.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 });
             services.Configure<string>(Startup.configuration.GetSection(""));
-            services.Configure<MailSettings>(Startup.configuration.GetSection("AppSettings:MailSettings"));
             var systemConnectionString = Startup.configuration["AppSettings:ConnectionString"];
             var key = Startup.configuration["AppSettings:JwtKey"];
 

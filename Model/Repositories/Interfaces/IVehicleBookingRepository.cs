@@ -17,5 +17,7 @@ namespace Model.Repositories.Interfaces
         public void UpdateBookingStatus(int id, string status);
 
         public VehicleBooking GetVehicleBooking(int id);
+
+        public List<VehicleBooking> GetUserBookings(int id);
     }
 }

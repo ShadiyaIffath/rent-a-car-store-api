@@ -62,7 +62,8 @@ namespace ProjectAPI.Services
             ImageFile additionalIdentification = JsonConvert.DeserializeObject<ImageFile>(customerDto.additionalIdentification.ToString());
             account.additionalIdentitfication = Convert.FromBase64String(additionalIdentification.value);
             _accountRepository.createCustomerAccount(account);
-            SendWelcomeEmail(account.email, account.firstName + account.lastName);
+            account.DecryptModel();
+            SendWelcomeEmail(account.email, account.firstName+" " + account.lastName);
             _logger.LogInformation("New User created");
             registered = true;
             return registered;

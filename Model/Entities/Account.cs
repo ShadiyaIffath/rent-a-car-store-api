@@ -43,7 +43,7 @@ namespace Model.Entities
         [Required]
         public bool active { get; set; }
 
-        public bool loyal { get; set; }
+        public string licenseId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
