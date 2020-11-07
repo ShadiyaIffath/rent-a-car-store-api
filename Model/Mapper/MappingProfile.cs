@@ -51,6 +51,8 @@ namespace Model.Mapper
             CreateMap<AccountDto, Account>();
             CreateMap<UpdateEquipmentBookingDto, EquipmentBooking>();
             CreateMap<UpdateVehicleBookingDto, VehicleBooking>();
+            CreateMap<CreateInquiryDto, Inquiry>();
+            CreateMap<Inquiry, InquiryDto>();
         }
     }
 }

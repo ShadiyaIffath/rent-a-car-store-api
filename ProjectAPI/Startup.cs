@@ -109,11 +109,13 @@ namespace ProjectAPI
             services.AddScoped<IEquipmentService, EquipmentService>();
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<IInquiryService, InquiryService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IVehicleBookingRepository, VehicleBookingRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<IEquipmentBookingRepository, EquipmentBookingRepository>();
+            services.AddScoped<IInquiryRepository, InquiryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

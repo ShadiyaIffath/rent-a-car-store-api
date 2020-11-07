@@ -85,14 +85,7 @@ namespace ProjectAPI.Services
         private void SendMail(VehicleBooking vehicle)
         {
             AccountDto account = _accountService.GetAccountById(vehicle.accountId);
-            string body = "Hello "+ account.firstName+" "+ account.lastName+",\n \tThis email is sent as a confirmation the reservation you made today from "+ vehicle.startTime+ " to "+ vehicle.endTime+ ". Please make sure to collect your reservation on time if you fail to do so your account will be blacklisted. This is your confirmation code "+ vehicle.confirmationCode+".\n Thank you.";
-            MailRequest mail = new MailRequest()
-            {
-                ToEmail = account.email,
-                Subject = "Booking successfully",
-                Body = body
-            };
-            _mailService.SendEmailAsync(mail);
+            _mailService.SendBookingConfirmationEmail(account.email, account.firstName + " " + account.lastName, vehicle);
         }
 
         public List<BookingDto> GetAllBookings()

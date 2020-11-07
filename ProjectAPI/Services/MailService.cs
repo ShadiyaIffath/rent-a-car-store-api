@@ -3,6 +3,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Model.Entities;
 using Model.Models;
 using Model.Models.MailService;
 using ProjectAPI.Services.Interfaces;
@@ -113,6 +114,50 @@ namespace ProjectAPI.Services
             string MailText = str.ReadToEnd();
             str.Close();
             MailText = MailText.Replace("[username]", UserName).Replace("[email]", ToEmail).Replace("[code]", code);
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.To.Add(MailboxAddress.Parse(ToEmail));
+            email.Subject = $"Password Change Request";
+            var builder = new BodyBuilder();
+            builder.HtmlBody = MailText;
+            email.Body = builder.ToMessageBody();
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            await smtp.SendAsync(email);
+            smtp.Disconnect(true);
+        }
+
+        public async Task SendInquiryResponseEmail(string ToEmail, string username, string response, string inquiry, string dateCreated)
+        {
+            string FilePath = Directory.GetCurrentDirectory() + "\\Templates\\InquiryResponseTemplate.html";
+            StreamReader str = new StreamReader(FilePath);
+            string MailText = str.ReadToEnd();
+            str.Close();
+            MailText = MailText.Replace("[username]", username).Replace("[inquiry]", inquiry).Replace("[dateCreated]", dateCreated).Replace("[response]", response);
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.To.Add(MailboxAddress.Parse(ToEmail));
+            email.Subject = $"Password Change Request";
+            var builder = new BodyBuilder();
+            builder.HtmlBody = MailText;
+            email.Body = builder.ToMessageBody();
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            await smtp.SendAsync(email);
+            smtp.Disconnect(true);
+        }
+
+        public async Task SendBookingConfirmationEmail(string ToEmail, string UserName, VehicleBooking vehicle)
+        {
+            string FilePath = Directory.GetCurrentDirectory() + "\\Templates\\BookingCreated.html";
+            StreamReader str = new StreamReader(FilePath);
+            string MailText = str.ReadToEnd();
+            str.Close();
+            MailText = MailText.Replace("[username]", UserName).Replace("[createdOn]",
+                vehicle.createdOn.ToString()).Replace("[code]", vehicle.confirmationCode).Replace("[start]", vehicle.startTime.ToString())
+                .Replace("[end]", vehicle.endTime.ToString() );
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(ToEmail));
