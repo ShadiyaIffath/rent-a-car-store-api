@@ -19,5 +19,11 @@ namespace ProjectAPI.Services.Interfaces
         void UpdateAccountStatus(int id, bool status);
 
         AccountDto GetAccountById(int id);
+
+        bool UpdateAccount(AccountDto dto);
+
+        string PasswordConfirmation(AccountDto dto);
+
+        void UpdateAccountPassword(int id, string password);
     }
 }

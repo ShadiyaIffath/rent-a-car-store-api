@@ -11,5 +11,7 @@ namespace ProjectAPI.Services.Interfaces
     {
         Task SendEmailAsync(MailRequest mailRequest);
         Task SendWelcomeEmailAsync(WelcomeRequest request);
+        Task SendProfileUpdated(ProfileUpdated request);
+        Task SendPasswordUpdateConfirmation(string ToEmail, string UserName, string code);
     }
 }

@@ -14,6 +14,8 @@ namespace Model.Models
 
         public string lastName { get; set; }
 
+        public string password { get; set; }
+
         public DateTime dob { get; set; }
 
         public int phone { get; set; }

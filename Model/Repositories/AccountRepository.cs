@@ -93,6 +93,18 @@ namespace Model.Repositories
             return id;
         }
 
+        public void UpdatePassword(int id, string password)
+        {
+            Account ac = _clientDbContext.Accounts.Where(x => x.id == id).FirstOrDefault();
+            if (ac == null)
+            {
+                throw new NullReferenceException();
+            }
+            ac.password = password;
+            _clientDbContext.SaveChanges();
+            _logger.LogInformation("Account password changed");
+        }
+
         public List<Account> getAccounts()
         {
             List<Account> accounts = _clientDbContext.Accounts.ToList<Account>();
@@ -133,6 +145,20 @@ namespace Model.Repositories
         public Account GetAccountById(int id)
         {
             return _clientDbContext.Accounts.Where(x => x.id == id).FirstOrDefault();
+        }
+
+        public bool CheckIfEmailIsUsed(string email, int id)
+        {
+            List<string> emails = _clientDbContext.Accounts.Where(y => y.id != id).Select(x => x.email).ToList();
+            foreach (var e in emails)
+            {
+                if (EncryptUtil.DecryptString(e) == email)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

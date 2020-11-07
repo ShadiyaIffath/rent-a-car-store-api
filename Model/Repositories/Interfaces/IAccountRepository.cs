@@ -22,5 +22,9 @@ namespace Model.Repositories.Interfaces
         void UpdateAccountStatus(int id, bool status);
 
         Account GetAccountById(int id);
+
+        bool CheckIfEmailIsUsed(string email, int id);
+
+        void UpdatePassword(int id, string password);
     }
 }

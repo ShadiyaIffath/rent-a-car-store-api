@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Permissions;
 using System.Threading.Tasks;
+using UtilityLibrary.Utils;
 
 namespace ProjectAPI.Services
 {
@@ -86,7 +87,38 @@ namespace ProjectAPI.Services
 
         public AccountDto GetAccountById(int id)
         {
-            return _mapper.Map<AccountDto>(_accountRepository.GetAccountById(id));
+            Account account = _accountRepository.GetAccountById(id);
+            account.DecryptModel();
+            return _mapper.Map<AccountDto>(account);
+        }
+
+        public bool UpdateAccount(AccountDto dto)
+        {
+            if (_accountRepository.CheckIfEmailIsUsed(dto.email, dto.id))
+            {
+                return false;
+            }
+
+            Account a = _mapper.Map<Account>(dto);
+            a.EncryptModel();
+            _accountRepository.Update(a);
+            a.DecryptModel();
+            SendProfileUpdatedMail(a.email, a.firstName + " " + a.lastName);
+            _logger.LogInformation("Account successfully updated");
+            return true;
+        }
+
+        public string PasswordConfirmation(AccountDto dto)
+        {
+            string code = ConfirmationCode.RandomString();
+            _mailService.SendPasswordUpdateConfirmation(dto.email, dto.firstName + " " + dto.lastName, code);
+            return code;
+        }
+
+        public void UpdateAccountPassword(int id, string password)
+        {
+            password = EncryptUtil.EncryptString(password);
+            _accountRepository.UpdatePassword(id, password);
         }
 
         private void SendWelcomeEmail(string email, string recipient)
@@ -98,6 +130,18 @@ namespace ProjectAPI.Services
             };
 
             _mailService.SendWelcomeEmailAsync(request);
+        }
+
+        private void SendProfileUpdatedMail(string email, string recipient)
+        {
+            ProfileUpdated updated = new ProfileUpdated()
+            {
+                ToEmail = email,
+                UserName = recipient,
+                Today = DateTime.Today.ToString("dd/MM/yyyy HH:mm:ss")
+            };
+
+            _mailService.SendProfileUpdated(updated);
         }
     }
 }

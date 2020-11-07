@@ -128,5 +128,68 @@ namespace ProjectAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpPatch("update-account")]
+        public IActionResult UpdateAccount([FromBody] AccountDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                if (_accountService.UpdateAccount(dto))
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return Conflict();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Update Failed" + ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("request-change")]
+        public IActionResult RequestPasswordChange([FromBody] AccountDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                string confirmation = _accountService.PasswordConfirmation(dto);
+                return Ok(confirmation);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Update Failed" + ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPatch("update-password")]
+        public IActionResult UpdatePassword([FromBody] AccountDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                _accountService.UpdateAccountPassword(dto.id, dto.password);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Update Failed" + ex.Message);
+            }
+        }
     }
 }
