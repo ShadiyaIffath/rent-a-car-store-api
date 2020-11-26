@@ -23,9 +23,9 @@ namespace ProjectAPI.Services
         private IVehicleBookingRepository _vehicleBookingRepository;
         private IEquipmentBookingRepository _equipmentBookingRepository;
         private readonly IMailService _mailService;
-        private IAccountService _accountService;
+        private IAccountRepository _accountRepository;
 
-        public BookingService(IMapper mapper, IVehicleBookingRepository bookingRepository, IAccountService accountService,
+        public BookingService(IMapper mapper, IVehicleBookingRepository bookingRepository, IAccountRepository accountRepository,
             IEquipmentBookingRepository equipmentRepository, IMailService mailService, ILogger<BookingService> logger)
         {
             _mapper = mapper;
@@ -33,7 +33,7 @@ namespace ProjectAPI.Services
             _logger = logger;
             _equipmentBookingRepository = equipmentRepository;
             _mailService = mailService;
-            _accountService = accountService;
+            _accountRepository = accountRepository;
         }
 
         public bool validateVehicleAvailability(int? id, DateTime start, DateTime end, int vehicleId)
@@ -84,7 +84,7 @@ namespace ProjectAPI.Services
 
         private void SendMail(VehicleBooking vehicle)
         {
-            AccountDto account = _accountService.GetAccountById(vehicle.accountId);
+            Account account = _accountRepository.GetAccountById(vehicle.accountId);
             _mailService.SendBookingConfirmationEmail(account.email, account.firstName + " " + account.lastName, vehicle);
         }
 

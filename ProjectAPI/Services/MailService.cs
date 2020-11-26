@@ -29,7 +29,8 @@ namespace ProjectAPI.Services
                     Host = mailSettings.GetSection("Host").Value,
                     Mail = mailSettings.GetSection("Mail").Value,
                     Password = mailSettings.GetSection("Password").Value,
-                    Port = int.Parse(mailSettings.GetSection("Port").Value)
+                    Port = int.Parse(mailSettings.GetSection("Port").Value),
+                    DMV = mailSettings.GetSection("DMV").Value
                 };
             }
         }
@@ -164,6 +165,30 @@ namespace ProjectAPI.Services
             email.Subject = $"Password Change Request";
             var builder = new BodyBuilder();
             builder.HtmlBody = MailText;
+            email.Body = builder.ToMessageBody();
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            await smtp.SendAsync(email);
+            smtp.Disconnect(true);
+        }
+
+        public async Task SendDMVNotification(string name, byte[] license, string offense, string date, int id, string licenseId)
+        {
+            string FilePath = Directory.GetCurrentDirectory() + "\\Templates\\dmvResponseTemplate.html";
+            StreamReader str = new StreamReader(FilePath);
+            string MailText = str.ReadToEnd();
+            str.Close();
+            MailText = MailText.Replace("[name]", name).Replace("[id]",
+                id.ToString()).Replace("[licenseId]", licenseId).Replace("[offense]", offense)
+                .Replace("[date]", date);
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.To.Add(MailboxAddress.Parse(_mailSettings.DMV));
+            email.Subject = $"Reported Driving License";
+            var builder = new BodyBuilder();
+            builder.HtmlBody = MailText;
+            builder.Attachments.Add("license.jpg", new MemoryStream(license));
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);

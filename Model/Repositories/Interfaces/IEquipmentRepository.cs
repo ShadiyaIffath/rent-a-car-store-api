@@ -19,5 +19,7 @@ namespace Model.Repositories.Interfaces
         bool ValidateNameInUse(string name, int id);
 
         void DeleteById(int id);
+
+        int CountEquipment();
     }
 }

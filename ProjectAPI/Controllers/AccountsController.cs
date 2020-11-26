@@ -53,14 +53,18 @@ namespace ProjectAPI.Controllers
             }        
             try
             {
-                if (_accountService.RegisterUser(customerDto))
-                {
-                    return Ok();
-                }
-                else
+                if (_accountService.validateEmail(customerDto.email))
                 {
                     return Conflict("Email in use");
                 }
+
+                if (_accountService.validateLicense(customerDto.licenseId))
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden, "License is not allowed");
+                }
+                _accountService.RegisterUser(customerDto);
+                 return Ok();
+                
             }
             catch (Exception)
             {
@@ -68,7 +72,7 @@ namespace ProjectAPI.Controllers
             }          
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpGet("get-accounts")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -76,7 +80,7 @@ namespace ProjectAPI.Controllers
             return Ok(accounts);
         }
 
-        [Authorize]
+        [Authorize(Roles ="admin")]
         [HttpDelete("delete-account")]
         public IActionResult DeleteAccountById(int id)
         {
@@ -189,6 +193,21 @@ namespace ProjectAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest("Update Failed" + ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("get-accounts")]
+        public async Task<IActionResult> DashboardData()
+        {
+            try
+            {
+                DashboardCardsView ds = await Task.FromResult(_accountService.GetCardDetails());
+                return Ok(ds);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

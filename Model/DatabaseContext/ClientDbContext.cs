@@ -30,5 +30,7 @@ namespace Model.DatabaseContext
         public DbSet<EquipmentBooking> EquipmentBookings { get; set; }
 
         public DbSet<Inquiry> Inquiries { get; set; }
+
+        public DbSet<DMV> DMV { get; set; }
     }
 }

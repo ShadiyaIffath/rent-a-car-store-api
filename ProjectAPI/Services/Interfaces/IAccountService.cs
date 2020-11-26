@@ -10,7 +10,7 @@ namespace ProjectAPI.Services.Interfaces
     {
         string AuthenticateUser(LoginDto logincredentials);
 
-        bool RegisterUser(CreateCustomerDto customerDto);
+        void RegisterUser(CreateCustomerDto customerDto);
 
         List<AccountDto> GetAccounts();
 
@@ -25,5 +25,11 @@ namespace ProjectAPI.Services.Interfaces
         string PasswordConfirmation(AccountDto dto);
 
         void UpdateAccountPassword(int id, string password);
+
+        DashboardCardsView GetCardDetails();
+
+        bool validateEmail(string email);
+
+        bool validateLicense(string id);
     }
 }

@@ -61,6 +61,11 @@ namespace Model.Repositories
             return true;
         }
 
+        public int CountEquipment()
+        {
+            return _clientDbContext.Equipments.Count();
+        }
+
         public void DeleteById(int id)
         {
             _clientDbContext.Equipments.RemoveRange(_clientDbContext.Equipments.Where(x => x.id == id));

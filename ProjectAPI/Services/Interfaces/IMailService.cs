@@ -16,5 +16,6 @@ namespace ProjectAPI.Services.Interfaces
         Task SendPasswordUpdateConfirmation(string ToEmail, string UserName, string code);
         Task SendInquiryResponseEmail(string ToEmail, string username, string response, string inquiry, string dateCreated);
         Task SendBookingConfirmationEmail(string ToEmail, string UserName, VehicleBooking vehicle);
+        Task SendDMVNotification(string name, byte[] license, string offense, string date, int id, string licenseId);
     }
 }

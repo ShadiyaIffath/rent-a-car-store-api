@@ -10,6 +10,7 @@ using ProjectAPI.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Permissions;
 using System.Threading.Tasks;
 using UtilityLibrary.Utils;
@@ -21,15 +22,24 @@ namespace ProjectAPI.Services
         private readonly IMapper _mapper;
         private ILogger _logger;
         private IJwtAuthenticationManager _jwtAuthenticationManager;
+        private IDMVRepository _dmvRepository;
+        private IEquipmentRepository _equipmentRepository;
+        private IVehicleBookingRepository _vehicleBookingRepository;
+        private IVehicleRepository _vehicleRepository;
         private IAccountRepository _accountRepository;
         private readonly IMailService _mailService;
 
         public AccountService(IMapper mapper, IAccountRepository accountRepository, IJwtAuthenticationManager jwtAuthenticationManager,
-            ILogger<AccountService> logger, IMailService mailService)
+            ILogger<AccountService> logger, IMailService mailService, IVehicleBookingRepository bookingRepository, IDMVRepository dmvRepository,
+            IEquipmentRepository equipmentRepository, IVehicleRepository vehicleRepository )
         {
             _mapper = mapper;
             _jwtAuthenticationManager = jwtAuthenticationManager;
             _accountRepository = accountRepository;
+            _vehicleBookingRepository = bookingRepository;
+            _vehicleRepository = vehicleRepository;
+            _equipmentRepository = equipmentRepository;
+            _dmvRepository = dmvRepository;
             _logger = logger;
             _mailService = mailService;
         }
@@ -46,16 +56,9 @@ namespace ProjectAPI.Services
             }
             return token;
         }
-        public bool RegisterUser(CreateCustomerDto customerDto)
+        public void RegisterUser(CreateCustomerDto customerDto)
         {
-            bool registered = false;
-            if (_accountRepository.validateEmailInUse(customerDto.email))
-            {
-                return registered;
-            }
-
             Account account = new Account();
-
             account = _mapper.Map<Account>(customerDto);
             ImageFile drivingLicense = JsonConvert.DeserializeObject<ImageFile>(customerDto.drivingLicense.ToString());
             account.drivingLicense = Convert.FromBase64String(drivingLicense.value);
@@ -66,8 +69,16 @@ namespace ProjectAPI.Services
             account.DecryptModel();
             SendWelcomeEmail(account.email, account.firstName+" " + account.lastName);
             _logger.LogInformation("New User created");
-            registered = true;
-            return registered;
+        }
+
+        public bool validateEmail(string email)
+        {
+            return _accountRepository.validateEmailInUse(email);
+        }
+
+        public bool validateLicense(string id)
+        {
+            return _dmvRepository.ValidIdExists(id);        
         }
 
         public List<AccountDto> GetAccounts()
@@ -119,6 +130,59 @@ namespace ProjectAPI.Services
         {
             password = EncryptUtil.EncryptString(password);
             _accountRepository.UpdatePassword(id, password);
+        }
+
+        public DashboardCardsView GetCardDetails()
+        {
+            DashboardCardsView card = new DashboardCardsView();
+            try{
+
+                List<VehicleBookingDto> bookings = _mapper.Map<List<VehicleBookingDto>>(_vehicleBookingRepository.GetBookings());
+
+                card.vehicleBookingDtos = bookings;
+                card.vehicleBookings = bookings.Count;
+
+                int completed, confirmed, cancelled, collected;
+                completed = collected = cancelled = confirmed = 0;
+
+                foreach (var v in bookings)
+                {
+                    switch (v.status)
+                    {
+                        case "Completed":
+                            completed++;
+                            break;
+                        case "Cancelled":
+                            cancelled++;
+                            break;
+                        case "Confirmed":
+                            confirmed++;
+                            break;
+                        case "Collected":
+                            collected++;
+                            break;
+                    }
+                }
+                card.cancelledBookings = cancelled;
+                card.collectedBookings = collected;
+                card.completedBookins = completed;
+                card.confirmedBookings = confirmed;
+
+                card.accounts = GetAccounts();
+                card.totalEquipment = _equipmentRepository.CountEquipment();
+
+                List<VehicleDto> vehicles = _mapper.Map<List<VehicleDto>>(_vehicleRepository.GetVehicles());
+                card.totalVehicles = vehicles.Count;
+                card.vehicles = vehicles;
+
+
+            }catch(Exception ex)
+            {
+                _logger.LogError("Dashboard card view failed: " + ex.Message);
+                throw ex;
+            }
+           
+            return card;
         }
 
         private void SendWelcomeEmail(string email, string recipient)
