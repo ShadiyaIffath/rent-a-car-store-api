@@ -66,6 +66,11 @@ namespace Model.Repositories
         {
             return _clientDbContext.VehicleBookings.Where(y => y.account.id == id).Include(x => x.vehicle).ThenInclude(a => a.type).Include(x => x.account).ToList();
         }
+
+        public List<VehicleBooking> GetBookingsWithinRange(DateTime start, DateTime end)
+        {
+            return _clientDbContext.VehicleBookings.Where(x => (x.status == "Confirmed" || x.status == "Collected") && ((x.startTime <= start && x.endTime >= start) || (x.startTime <= end && x.endTime >= end))).ToList();
+        }
     }
 
 }

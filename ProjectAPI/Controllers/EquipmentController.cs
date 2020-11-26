@@ -41,7 +41,7 @@ namespace ProjectAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Failed");
+                return BadRequest("Failed: "+ ex.Message);
             }
             return Ok();
         }

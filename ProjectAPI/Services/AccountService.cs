@@ -136,11 +136,10 @@ namespace ProjectAPI.Services
         {
             DashboardCardsView card = new DashboardCardsView();
             try{
-
-                List<VehicleBookingDto> bookings = _mapper.Map<List<VehicleBookingDto>>(_vehicleBookingRepository.GetBookings());
-
-                card.vehicleBookingDtos = bookings;
-                card.vehicleBookings = bookings.Count;
+                DateTime today = new DateTime();
+                List<VehicleBooking> bookings = _vehicleBookingRepository.GetBookings() ;
+               
+                card.vehicleBookingDtos = _mapper.Map<List<VehicleBookingDto>>(_vehicleBookingRepository.GetBookingsWithinRange(today, today.AddDays(7)));
 
                 int completed, confirmed, cancelled, collected;
                 completed = collected = cancelled = confirmed = 0;
@@ -169,13 +168,40 @@ namespace ProjectAPI.Services
                 card.confirmedBookings = confirmed;
 
                 card.accounts = GetAccounts();
-                card.totalEquipment = _equipmentRepository.CountEquipment();
 
                 List<VehicleDto> vehicles = _mapper.Map<List<VehicleDto>>(_vehicleRepository.GetVehicles());
                 card.totalVehicles = vehicles.Count;
-                card.vehicles = vehicles;
 
+                int a, b, c, d, e;
+                a = b = c = d = e = 0;
 
+                foreach(var v in vehicles)
+                {
+                    switch (v.type.id)
+                    {
+                        case 4:
+                            a++;
+                            break;
+                        case 5:
+                            b++;
+                            break;
+                        case 6:
+                            c++;
+                            break;
+                        case 7:
+                            d++;
+                            break;
+                        case 8:
+                            e++;
+                            break;
+                 
+                    }
+                }
+                card.smallTownCar = a;
+                card.hatchback = b;
+                card.saloon = c;
+                card.estate = d;
+                card.vans = e;
             }catch(Exception ex)
             {
                 _logger.LogError("Dashboard card view failed: " + ex.Message);

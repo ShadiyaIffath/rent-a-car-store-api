@@ -19,5 +19,7 @@ namespace Model.Repositories.Interfaces
         public VehicleBooking GetVehicleBooking(int id);
 
         public List<VehicleBooking> GetUserBookings(int id);
+
+        public List<VehicleBooking> GetBookingsWithinRange(DateTime start, DateTime end);
     }
 }

@@ -143,7 +143,7 @@ namespace ProjectAPI.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest();
+                return BadRequest("Failed:" + ex.Message);
             }
         }
 

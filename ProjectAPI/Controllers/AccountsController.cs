@@ -196,8 +196,8 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpGet("get-accounts")]
+        [Authorize]
+        [HttpGet("dashboard")]
         public async Task<IActionResult> DashboardData()
         {
             try

@@ -8,8 +8,6 @@ namespace Model.Models
     {
         public int totalVehicles { get; set; }
 
-        public int totalEquipment { get; set; }
-
         public int vehicleBookings { get; set; }
 
         public int completedBookins { get; set; }
@@ -20,7 +18,15 @@ namespace Model.Models
 
         public int confirmedBookings { get; set; }
 
-        public List<VehicleDto> vehicles { get; set; }
+        public int smallTownCar  { get; set; }
+
+        public int hatchback { get; set; }
+
+        public int saloon { get; set; }
+
+        public int estate { get; set; }
+
+        public int vans { get; set; }
 
         public List<AccountDto> accounts { get; set; }
 

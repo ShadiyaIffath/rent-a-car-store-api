@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 using ProjectAPI.Services.Interfaces;
-using Model.Models;
 
 namespace ProjectAPI.Controllers
 {
