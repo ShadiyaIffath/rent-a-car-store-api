@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Models;
 using ProjectAPI.Services.Interfaces;
@@ -18,7 +19,7 @@ namespace ProjectAPI.Controllers
         {
             _dmvService = dmvService;
         }
-
+        [Authorize]
         [HttpGet("get-dmv")]
         public async Task<IActionResult> GetAllDMV()
         {
@@ -37,6 +38,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("validate-license")]
         public async Task<IActionResult> ValidateLicense([FromForm] DMVValidationRequest request )
         {

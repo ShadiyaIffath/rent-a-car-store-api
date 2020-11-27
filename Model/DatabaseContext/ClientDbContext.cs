@@ -32,5 +32,7 @@ namespace Model.DatabaseContext
         public DbSet<Inquiry> Inquiries { get; set; }
 
         public DbSet<DMV> DMV { get; set; }
+
+        public DbSet<CarRating> CarRatings { get; set; }
     }
 }

@@ -54,6 +54,7 @@ namespace Model.Mapper
             CreateMap<CreateInquiryDto, Inquiry>();
             CreateMap<Inquiry, InquiryDto>();
             CreateMap<DMV, DMVDto>();
+            CreateMap<CarRating, CarRatingDto>();
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Model.DatabaseContext;
 
 namespace Model.Migrations
 {
     [DbContext(typeof(ClientDbContext))]
-    partial class ClientDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201127124722_carrating")]
+    partial class carrating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,7 +99,7 @@ namespace Model.Migrations
 
             modelBuilder.Entity("Model.Entities.CarRating", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AdvertId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -119,7 +121,7 @@ namespace Model.Migrations
                     b.Property<float>("RatePerWeek")
                         .HasColumnType("real");
 
-                    b.HasKey("Id");
+                    b.HasKey("AdvertId");
 
                     b.ToTable("CarRatings");
                 });

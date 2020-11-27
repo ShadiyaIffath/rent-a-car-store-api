@@ -118,6 +118,7 @@ namespace ProjectAPI
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IInquiryService, InquiryService>();
             services.AddScoped<IDMVService, DMVService>();
+            services.AddScoped<IWebScrapingService, WebScrapingService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IVehicleBookingRepository, VehicleBookingRepository>();
@@ -125,6 +126,7 @@ namespace ProjectAPI
             services.AddScoped<IEquipmentBookingRepository, EquipmentBookingRepository>();
             services.AddScoped<IInquiryRepository, InquiryRepository>();
             services.AddScoped<IDMVRepository, DMVRepository>();
+            services.AddScoped<ICarRatingRepository, CarRatingRepository>();
 
             services.AddHangfire(options =>
             {
@@ -158,7 +160,8 @@ namespace ProjectAPI
             };
             app.UseHangfireDashboard("/main/admin/hangfire", options);
             app.UseHangfireServer();
-            RecurringJob.AddOrUpdate<DMVService>(s => s.GetLicenses(), "1 0 * * *", TimeZoneInfo.Local) ;
+            RecurringJob.AddOrUpdate<DMVService>(s => s.GetLicenses(), "1 0 * * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<WebScrapingService>(w => w.CheckForUpdates("malkey"), "0 0 * * 0", TimeZoneInfo.Local);
 
             app.UseEndpoints(endpoints =>
             {
