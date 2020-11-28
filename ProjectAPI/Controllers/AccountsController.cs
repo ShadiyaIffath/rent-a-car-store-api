@@ -62,6 +62,11 @@ namespace ProjectAPI.Controllers
                 {
                     return StatusCode(StatusCodes.Status403Forbidden, "License is not allowed");
                 }
+
+                if (_accountService.validateFraudLicense(customerDto.licenseId))
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden, "License is not allowed");
+                }
                 _accountService.RegisterUser(customerDto);
                  return Ok();
                 

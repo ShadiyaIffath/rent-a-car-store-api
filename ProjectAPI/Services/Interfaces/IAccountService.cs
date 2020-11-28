@@ -31,5 +31,7 @@ namespace ProjectAPI.Services.Interfaces
         bool validateEmail(string email);
 
         bool validateLicense(string id);
+
+        bool validateFraudLicense(string license);
     }
 }

@@ -10,6 +10,10 @@
     <Compile Remove="Migrations\20200807123517_vehicle-booking-created.Designer.cs" />
     <Compile Remove="Migrations\20201125193522_dmv.cs" />
     <Compile Remove="Migrations\20201125193522_dmv.Designer.cs" />
+    <Compile Remove="Migrations\20201127191427_Frauds.cs" />
+    <Compile Remove="Migrations\20201127191427_Frauds.Designer.cs" />
+    <Compile Remove="Migrations\20201128075653_insurer.cs" />
+    <Compile Remove="Migrations\20201128075653_insurer.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

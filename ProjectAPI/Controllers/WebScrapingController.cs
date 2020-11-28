@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Model.Models;
 using ProjectAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Model.Repositories.Interfaces;
+using Model.Entities;
 
 namespace ProjectAPI.Controllers
 {
@@ -20,9 +22,11 @@ namespace ProjectAPI.Controllers
     {
 
         private IWebScrapingService _webScrapingService;
-        public WebScrapingController(IWebScrapingService webScrapingService)
+        private IFraudClaimRepository _fraudClaimRepository;
+        public WebScrapingController(IWebScrapingService webScrapingService, IFraudClaimRepository fraudClaimRepository)
         {
             _webScrapingService = webScrapingService;
+            _fraudClaimRepository = fraudClaimRepository;
         }
         
     
@@ -39,6 +43,5 @@ namespace ProjectAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-    }
+   }
 }

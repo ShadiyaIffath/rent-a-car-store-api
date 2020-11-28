@@ -25,13 +25,14 @@ namespace ProjectAPI.Services
         private IDMVRepository _dmvRepository;
         private IEquipmentRepository _equipmentRepository;
         private IVehicleBookingRepository _vehicleBookingRepository;
+        private IFraudClaimRepository _fraudClaimRepository;
         private IVehicleRepository _vehicleRepository;
         private IAccountRepository _accountRepository;
         private readonly IMailService _mailService;
 
         public AccountService(IMapper mapper, IAccountRepository accountRepository, IJwtAuthenticationManager jwtAuthenticationManager,
             ILogger<AccountService> logger, IMailService mailService, IVehicleBookingRepository bookingRepository, IDMVRepository dmvRepository,
-            IEquipmentRepository equipmentRepository, IVehicleRepository vehicleRepository )
+            IEquipmentRepository equipmentRepository, IVehicleRepository vehicleRepository, IFraudClaimRepository fraudClaimRepository )
         {
             _mapper = mapper;
             _jwtAuthenticationManager = jwtAuthenticationManager;
@@ -42,6 +43,7 @@ namespace ProjectAPI.Services
             _dmvRepository = dmvRepository;
             _logger = logger;
             _mailService = mailService;
+            _fraudClaimRepository = fraudClaimRepository;
         }
 
         public string AuthenticateUser(LoginDto logincredentials)
@@ -79,6 +81,11 @@ namespace ProjectAPI.Services
         public bool validateLicense(string id)
         {
             return _dmvRepository.ValidIdExists(id);        
+        }
+
+        public bool validateFraudLicense(string license)
+        {
+            return _fraudClaimRepository.ValidateLicenseExists(license);
         }
 
         public List<AccountDto> GetAccounts()

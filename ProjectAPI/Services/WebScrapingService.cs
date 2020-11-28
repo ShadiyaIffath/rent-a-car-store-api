@@ -17,7 +17,6 @@ namespace ProjectAPI.Services
 {
     public class WebScrapingService : IWebScrapingService
     {
-        private readonly String websiteUrl = "https://www.malkey.lk/rates/self-drive-rates.html";
         private ICarRatingRepository _carRatingRepository;
         private IConfiguration _iConfiguration;
         private readonly IMapper _mapper;

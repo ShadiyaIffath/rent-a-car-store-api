@@ -67,12 +67,16 @@ namespace ProjectAPI
                 });
             services.Configure<string>(Startup.configuration.GetSection(""));
             var systemConnectionString = Startup.configuration["AppSettings:ConnectionString"];
+            var insuranceConnectionString = Startup.configuration["Insurer:ConnectionString"];
             var key = Startup.configuration["AppSettings:JwtKey"];
 
             services.AddDbContext<ClientDbContext>(options =>
                 options.UseSqlServer(systemConnectionString,
                     optionsBuilder =>
                         optionsBuilder.MigrationsAssembly("Model")));
+
+            services.AddDbContext<InsuranceDbContext>(options =>
+                 options.UseSqlServer(insuranceConnectionString));
 
             services.AddAuthentication(x =>
            {
@@ -118,6 +122,7 @@ namespace ProjectAPI
             services.AddScoped<IBookingService, BookingService>();
             services.AddScoped<IInquiryService, InquiryService>();
             services.AddScoped<IDMVService, DMVService>();
+            services.AddScoped<IInsurerService, InsurerService>();
             services.AddScoped<IWebScrapingService, WebScrapingService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
@@ -127,6 +132,7 @@ namespace ProjectAPI
             services.AddScoped<IInquiryRepository, InquiryRepository>();
             services.AddScoped<IDMVRepository, DMVRepository>();
             services.AddScoped<ICarRatingRepository, CarRatingRepository>();
+            services.AddScoped<IFraudClaimRepository, FraudClaimRepository>();
 
             services.AddHangfire(options =>
             {
