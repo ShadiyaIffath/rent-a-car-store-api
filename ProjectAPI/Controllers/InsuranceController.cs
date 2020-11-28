@@ -37,7 +37,7 @@ namespace ProjectAPI.Controllers
         }
 
         [HttpPost("validate-fraud")]
-        public async Task<IActionResult> ValidateLicense([FromBody]string drivingLicense)
+        public async Task<IActionResult> ValidateLicense(string drivingLicense)
         {
             try
             {

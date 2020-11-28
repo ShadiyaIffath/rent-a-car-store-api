@@ -29,8 +29,8 @@ namespace Model.Repositories
 
         public bool ValidateLicenseExists(string drivingLicense)
         {
-            var claims = _insuranceDbContext.Claims.Where(x => x.DrivingLicense == drivingLicense);
-            if (claims == null)
+            var claims = _insuranceDbContext.Claims.Where(x => x.DrivingLicense == drivingLicense).ToList();
+            if (claims.Count == 0)
             {
                 return false;
             }

@@ -8,7 +8,7 @@ namespace Model.Models
     {
         public int totalVehicles { get; set; }
 
-        public int vehicleBookings { get; set; }
+        public int bookings { get; set; }
 
         public int completedBookins { get; set; }
 
@@ -30,6 +30,6 @@ namespace Model.Models
 
         public List<AccountDto> accounts { get; set; }
 
-        public List<VehicleBookingDto> vehicleBookingDtos { get; set; }
+        public List<VehicleBookingDto> vehicleBookings { get; set; }
     }
 }

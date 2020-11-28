@@ -139,7 +139,7 @@ namespace ProjectAPI.Services
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(ToEmail));
-            email.Subject = $"Password Change Request";
+            email.Subject = $"Response to your inquiry";
             var builder = new BodyBuilder();
             builder.HtmlBody = MailText;
             email.Body = builder.ToMessageBody();
@@ -162,7 +162,7 @@ namespace ProjectAPI.Services
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
             email.To.Add(MailboxAddress.Parse(ToEmail));
-            email.Subject = $"Password Change Request";
+            email.Subject = $"Reservation creation";
             var builder = new BodyBuilder();
             builder.HtmlBody = MailText;
             email.Body = builder.ToMessageBody();

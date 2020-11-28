@@ -143,10 +143,11 @@ namespace ProjectAPI.Services
         {
             DashboardCardsView card = new DashboardCardsView();
             try{
-                DateTime today = new DateTime();
+                DateTime today = DateTime.Today;
                 List<VehicleBooking> bookings = _vehicleBookingRepository.GetBookings() ;
                
-                card.vehicleBookingDtos = _mapper.Map<List<VehicleBookingDto>>(_vehicleBookingRepository.GetBookingsWithinRange(today, today.AddDays(7)));
+                card.vehicleBookings = _mapper.Map<List<VehicleBookingDto>>(_vehicleBookingRepository.GetBookingsWithinRange(today, today.AddDays(7)));
+                card.bookings = card.vehicleBookings.Count;
 
                 int completed, confirmed, cancelled, collected;
                 completed = collected = cancelled = confirmed = 0;
