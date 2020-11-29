@@ -4,6 +4,7 @@ using Model.Entities;
 using Model.Models;
 using Model.Models.MailService;
 using Model.Repositories.Interfaces;
+using Model.Repositories.RepositoryFactory;
 using Newtonsoft.Json;
 using ProjectAPI.Interfaces;
 using ProjectAPI.Services.Interfaces;
@@ -22,39 +23,37 @@ namespace ProjectAPI.Services
         private readonly IMapper _mapper;
         private ILogger _logger;
         private IJwtAuthenticationManager _jwtAuthenticationManager;
-        private IDMVRepository _dmvRepository;
-        private IEquipmentRepository _equipmentRepository;
-        private IVehicleBookingRepository _vehicleBookingRepository;
+        private IRepositoryFactory _repositoryFactory;
         private IFraudClaimRepository _fraudClaimRepository;
-        private IVehicleRepository _vehicleRepository;
-        private IAccountRepository _accountRepository;
         private readonly IMailService _mailService;
 
-        public AccountService(IMapper mapper, IAccountRepository accountRepository, IJwtAuthenticationManager jwtAuthenticationManager,
-            ILogger<AccountService> logger, IMailService mailService, IVehicleBookingRepository bookingRepository, IDMVRepository dmvRepository,
-            IEquipmentRepository equipmentRepository, IVehicleRepository vehicleRepository, IFraudClaimRepository fraudClaimRepository )
+        public AccountService(IMapper mapper,IJwtAuthenticationManager jwtAuthenticationManager, ILogger<AccountService> logger, IMailService mailService,
+            IFraudClaimRepository fraudClaimRepository, IRepositoryFactory repositoryFactory)
         {
             _mapper = mapper;
             _jwtAuthenticationManager = jwtAuthenticationManager;
-            _accountRepository = accountRepository;
-            _vehicleBookingRepository = bookingRepository;
-            _vehicleRepository = vehicleRepository;
-            _equipmentRepository = equipmentRepository;
-            _dmvRepository = dmvRepository;
             _logger = logger;
             _mailService = mailService;
             _fraudClaimRepository = fraudClaimRepository;
+            _repositoryFactory = repositoryFactory;
         }
 
         public string AuthenticateUser(LoginDto logincredentials)
         {
-            Account loggedIn = _accountRepository.login(logincredentials.email, logincredentials.password);
             string token = null;
-
-            if (loggedIn != null)
+            try
             {
-                token = _jwtAuthenticationManager.Authenticate(logincredentials.email, loggedIn.type.type, loggedIn.id);
-                _logger.LogInformation("User authenticated: " + loggedIn.id);
+                Account loggedIn = _repositoryFactory.AccountRepository.login(logincredentials.email, logincredentials.password);
+
+
+                if (loggedIn != null)
+                {
+                    token = _jwtAuthenticationManager.Authenticate(logincredentials.email, loggedIn.type.type, loggedIn.id);
+                    _logger.LogInformation("User authenticated: " + loggedIn.id);
+                }
+            }catch(Exception ex)
+            {
+                _logger.Log(LogLevel.Warning, ex.Message);
             }
             return token;
         }
@@ -67,7 +66,7 @@ namespace ProjectAPI.Services
 
             ImageFile additionalIdentification = JsonConvert.DeserializeObject<ImageFile>(customerDto.additionalIdentification.ToString());
             account.additionalIdentitfication = Convert.FromBase64String(additionalIdentification.value);
-            _accountRepository.createCustomerAccount(account);
+            _repositoryFactory.AccountRepository.createCustomerAccount(account);
             account.DecryptModel();
             SendWelcomeEmail(account.email, account.firstName+" " + account.lastName);
             _logger.LogInformation("New User created");
@@ -75,12 +74,12 @@ namespace ProjectAPI.Services
 
         public bool validateEmail(string email)
         {
-            return _accountRepository.validateEmailInUse(email);
+            return _repositoryFactory.AccountRepository.validateEmailInUse(email);
         }
 
         public bool validateLicense(string id)
         {
-            return _dmvRepository.ValidIdExists(id);        
+            return _repositoryFactory.DMVRepository.ValidIdExists(id);        
         }
 
         public bool validateFraudLicense(string license)
@@ -90,36 +89,38 @@ namespace ProjectAPI.Services
 
         public List<AccountDto> GetAccounts()
         {
-            return _mapper.Map<List<AccountDto>>((_accountRepository.getAccounts()));
+            return _mapper.Map<List<AccountDto>>((_repositoryFactory.AccountRepository.getAccounts()));
         }
 
         public void DeleteAccountById(int id)
         {
-            _accountRepository.DeleteById(id);
+            _repositoryFactory.AccountRepository.DeleteById(id);
+            _logger.LogInformation("Account deleted successfully");
         }
 
         public void UpdateAccountStatus(int id, bool status)
         {
-            _accountRepository.UpdateAccountStatus(id, status);
+            _repositoryFactory.AccountRepository.UpdateAccountStatus(id, status);
+            _logger.LogInformation("Account status updated");
         }
 
         public AccountDto GetAccountById(int id)
         {
-            Account account = _accountRepository.GetAccountById(id);
+            Account account = _repositoryFactory.AccountRepository.GetAccountById(id);
             account.DecryptModel();
             return _mapper.Map<AccountDto>(account);
         }
 
         public bool UpdateAccount(AccountDto dto)
         {
-            if (_accountRepository.CheckIfEmailIsUsed(dto.email, dto.id))
+            if (_repositoryFactory.AccountRepository.CheckIfEmailIsUsed(dto.email, dto.id))
             {
                 return false;
             }
 
             Account a = _mapper.Map<Account>(dto);
             a.EncryptModel();
-            _accountRepository.Update(a);
+            _repositoryFactory.AccountRepository.Update(a);
             a.DecryptModel();
             SendProfileUpdatedMail(a.email, a.firstName + " " + a.lastName);
             _logger.LogInformation("Account successfully updated");
@@ -136,7 +137,8 @@ namespace ProjectAPI.Services
         public void UpdateAccountPassword(int id, string password)
         {
             password = EncryptUtil.EncryptString(password);
-            _accountRepository.UpdatePassword(id, password);
+            _repositoryFactory.AccountRepository.UpdatePassword(id, password);
+            _logger.LogInformation("Account password changed");
         }
 
         public DashboardCardsView GetCardDetails()
@@ -144,9 +146,9 @@ namespace ProjectAPI.Services
             DashboardCardsView card = new DashboardCardsView();
             try{
                 DateTime today = DateTime.Today;
-                List<VehicleBooking> bookings = _vehicleBookingRepository.GetBookings() ;
+                List<VehicleBooking> bookings = _repositoryFactory.VehicleBookingRepository.GetBookings() ;
                
-                card.vehicleBookings = _mapper.Map<List<VehicleBookingDto>>(_vehicleBookingRepository.GetBookingsWithinRange(today, today.AddDays(7)));
+                card.vehicleBookings = _mapper.Map<List<VehicleBookingDto>>(_repositoryFactory.VehicleBookingRepository.GetBookingsWithinRange(today, today.AddDays(7)));
                 card.bookings = card.vehicleBookings.Count;
 
                 int completed, confirmed, cancelled, collected;
@@ -177,7 +179,7 @@ namespace ProjectAPI.Services
 
                 card.accounts = GetAccounts();
 
-                List<VehicleDto> vehicles = _mapper.Map<List<VehicleDto>>(_vehicleRepository.GetVehicles());
+                List<VehicleDto> vehicles = _mapper.Map<List<VehicleDto>>(_repositoryFactory.VehicleRepository.GetVehicles());
                 card.totalVehicles = vehicles.Count;
 
                 int a, b, c, d, e;

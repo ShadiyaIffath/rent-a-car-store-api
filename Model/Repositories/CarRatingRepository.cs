@@ -13,10 +13,8 @@ namespace Model.Repositories
 {
     public class CarRatingRepository : RepositoryBase<CarRating>, ICarRatingRepository
     {
-        private ILogger _logger;
-        public CarRatingRepository(ClientDbContext clientDbContext, ILogger<CarRatingRepository> logger) : base(clientDbContext)
+        public CarRatingRepository(ClientDbContext clientDbContext) : base(clientDbContext)
         {
-            _logger = logger;
         }
 
         public CarRating FindByModel(string model)
@@ -36,7 +34,6 @@ namespace Model.Repositories
                 if (advertExists == null)
                 {
                     Delete(rating);
-                    _logger.LogInformation("Car rating deleted");
                 }
             }
 
@@ -51,12 +48,10 @@ namespace Model.Repositories
                     if (existingadvert.RatePerMonth != rating.RatePerMonth)
                     {
                         existingadvert.RatePerMonth = rating.RatePerMonth;
-                        _logger.LogInformation("Car rating updated");
                         _clientDbContext.SaveChanges();
                     }
                     continue;
                 }
-
                 Create(rating);
             }
         }

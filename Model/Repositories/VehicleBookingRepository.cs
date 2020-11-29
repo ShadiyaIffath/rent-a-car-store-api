@@ -14,11 +14,9 @@ namespace Model.Repositories
 {
     public class VehicleBookingRepository : RepositoryBase<VehicleBooking>, IVehicleBookingRepository
     {
-        private ILogger _logger;
 
-        public VehicleBookingRepository(ClientDbContext clientDbContext, ILogger<VehicleBookingRepository> logger) : base(clientDbContext)
+        public VehicleBookingRepository(ClientDbContext clientDbContext) : base(clientDbContext)
         {
-            _logger = logger;
         }
 
         public List<VehicleBooking> validateRange(int? id, DateTime start, DateTime end, int vehicleId)
@@ -53,9 +51,7 @@ namespace Model.Repositories
             VehicleBooking vehicleBooking = _clientDbContext.VehicleBookings.Where(x => x.id == id).FirstOrDefault();
             vehicleBooking.status = status;
             _clientDbContext.SaveChanges();
-
-            _logger.LogInformation("Booking #" + id + " status updated");
-        }
+       }
 
         public VehicleBooking GetVehicleBooking(int id)
         {

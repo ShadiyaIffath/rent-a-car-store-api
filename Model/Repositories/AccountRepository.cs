@@ -17,33 +17,24 @@ namespace Model.Repositories
 {
     public class AccountRepository : RepositoryBase<Account>, IAccountRepository
     {
-        private ILogger _logger;
-        public AccountRepository(ClientDbContext clientDbContext, ILogger<AccountRepository> logger):base(clientDbContext)
+        public AccountRepository(ClientDbContext clientDbContext):base(clientDbContext)
         {
-            _logger = logger;
         }
 
-        public Account login(string email , string password)
+        public Account login(string email, string password)
         {
             Account valid = null;
-            try
-            {
-                List<Account> accounts = _clientDbContext.Accounts.Include(a => a.type).ToList<Account>();
+            List<Account> accounts = _clientDbContext.Accounts.Include(a => a.type).ToList<Account>();
 
-                foreach (Account ac in accounts)
+            foreach (Account ac in accounts)
+            {
+                ac.DecryptModel();
+
+                if (ac.email == email && ac.password == password)
                 {
-                    ac.DecryptModel();
-
-                    if (ac.email == email && ac.password == password)
-                    {
-                        valid = ac;
-                        break;
-                    }
+                    valid = ac;
+                    break;
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Warning, ex.Message);
             }
             return valid;
         }
@@ -69,7 +60,6 @@ namespace Model.Repositories
             account.type = GetAccountType(account.typeId);
             account.EncryptModel();
             Create(account);
-            _logger.LogInformation("Account successfully created");
         }
 
         private AccountType GetAccountType(int id)
@@ -102,7 +92,6 @@ namespace Model.Repositories
             }
             ac.password = password;
             _clientDbContext.SaveChanges();
-            _logger.LogInformation("Account password changed");
         }
 
         public List<Account> getAccounts()
@@ -121,7 +110,6 @@ namespace Model.Repositories
             _clientDbContext.VehicleBookings.RemoveRange(_clientDbContext.VehicleBookings.Where(x => x.account.id == id));
             _clientDbContext.EquipmentBookings.RemoveRange(_clientDbContext.EquipmentBookings.Where(x => x.vehicleBooking.account.id == id));
             _clientDbContext.SaveChanges();
-            _logger.LogInformation("Account deleted successfully");
         }
 
         public void UpdateAccountStatus(int id, bool status)
@@ -139,7 +127,6 @@ namespace Model.Repositories
                 (from v in _clientDbContext.VehicleBookings where v.account.id == id select v).ToList().ForEach(s => s.status = "Cancelled");
                 _clientDbContext.SaveChanges();
             }
-            _logger.LogInformation("Account status updated");
         }
 
         public Account GetAccountById(int id)

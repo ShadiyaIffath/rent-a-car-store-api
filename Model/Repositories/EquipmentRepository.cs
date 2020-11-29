@@ -13,17 +13,14 @@ namespace Model.Repositories
 {
     public class EquipmentRepository : RepositoryBase<Equipment>, IEquipmentRepository
     {
-        private ILogger _logger;
-        public EquipmentRepository(ClientDbContext clientDbContext, ILogger<EquipmentRepository> logger) : base(clientDbContext)
+        public EquipmentRepository(ClientDbContext clientDbContext) : base(clientDbContext)
         {
-            _logger = logger;
         }
 
         public void CreateEquipmentCategory(EquipmentCategory equipmentCategory)
         {
             _clientDbContext.EquipmentCategories.Add(equipmentCategory);
             _clientDbContext.SaveChanges();
-            _logger.LogInformation("Category created");
         }
 
         public List<Equipment> GetEquipment()
@@ -70,7 +67,6 @@ namespace Model.Repositories
         {
             _clientDbContext.Equipments.RemoveRange(_clientDbContext.Equipments.Where(x => x.id == id));
             _clientDbContext.SaveChanges();
-            _logger.LogInformation("Equipment deleted successfully");
         }
     }
 }

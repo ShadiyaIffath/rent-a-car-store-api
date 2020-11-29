@@ -12,19 +12,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using HtmlAgilityPack;
+using Model.Repositories.RepositoryFactory;
 
 namespace ProjectAPI.Services
 {
     public class WebScrapingService : IWebScrapingService
     {
-        private ICarRatingRepository _carRatingRepository;
+        private IRepositoryFactory _repositoryFactory;
         private IConfiguration _iConfiguration;
         private readonly IMapper _mapper;
         private ILogger _logger;
 
-        public WebScrapingService(ICarRatingRepository CarRatingRepository, IMapper mapper, ILogger<WebScrapingService> logger, IConfiguration iConfiguration)
+        public WebScrapingService(IRepositoryFactory repositoryFactory, IMapper mapper, ILogger<WebScrapingService> logger, IConfiguration iConfiguration)
         {
-            _carRatingRepository = CarRatingRepository;
+            _repositoryFactory = repositoryFactory;
             _mapper = mapper;
             _logger = logger;
             _iConfiguration = iConfiguration;
@@ -42,7 +43,7 @@ namespace ProjectAPI.Services
 
                 if (key.Equals("malkey"))
                 {
-                    _carRatingRepository.UpdateRating(adverts);
+                    _repositoryFactory.CarRatingRepository.UpdateRating(adverts);
                 }
             }catch(Exception ex)
             {
@@ -100,7 +101,7 @@ namespace ProjectAPI.Services
 
         public List<CarRatingDto> GetRatingDtos()
         {
-            return _mapper.Map<List<CarRatingDto>>(_carRatingRepository.FindAll());
+            return _mapper.Map<List<CarRatingDto>>(_repositoryFactory.CarRatingRepository.FindAll());
         }
     }
 }

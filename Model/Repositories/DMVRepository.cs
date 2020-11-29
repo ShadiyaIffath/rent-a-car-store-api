@@ -13,10 +13,8 @@ namespace Model.Repositories
 {
     public class DMVRepository : RepositoryBase<DMV>, IDMVRepository
     {
-        private ILogger _logger;
-        public DMVRepository(ClientDbContext clientDbContext, ILogger<DMVRepository> logger) : base(clientDbContext)
+        public DMVRepository(ClientDbContext clientDbContext) : base(clientDbContext)
         {
-            _logger = logger;
         }
 
         public List<DMV> GetDMV()

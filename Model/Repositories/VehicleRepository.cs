@@ -16,11 +16,9 @@ namespace Model.Repositories
 {
     public class VehicleRepository : RepositoryBase<Vehicle>, IVehicleRepository
     {
-        private ILogger _logger;
 
-        public VehicleRepository(ClientDbContext clientDbContext, ILogger<VehicleRepository> logger) : base(clientDbContext)
+        public VehicleRepository(ClientDbContext clientDbContext) : base(clientDbContext)
         {
-            _logger = logger;
         }
 
         public List<Vehicle> GetVehicles()
@@ -29,29 +27,16 @@ namespace Model.Repositories
         }
         public void SaveVehicleType(VehicleType type)
         {
-            try
-            {
-                _clientDbContext.VehicleTypes.Add(type);
-                _clientDbContext.SaveChanges();
-
-            }catch(Exception ex)
-            {
-                _logger.Log(LogLevel.Error, ex.Message);
-            }
+            _clientDbContext.VehicleTypes.Add(type);
+            _clientDbContext.SaveChanges();
         }
 
         public List<VehicleType> GetVehicleTypes()
         {
             List<VehicleType> types = new List<VehicleType>();
 
-            try
-            {
-                types = _clientDbContext.VehicleTypes.ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(LogLevel.Error, ex.Message);
-            }
+            types = _clientDbContext.VehicleTypes.ToList();
+
             return types;
         }
         public void UpdateVehicleStatus(UpdateStatusVehicleDto statusVehicleDto)
@@ -66,7 +51,6 @@ namespace Model.Repositories
             vehicle.active = statusVehicleDto.active;
             vehicle.dayRemoved = statusVehicleDto.dayRemoved;
             _clientDbContext.SaveChanges();
-            _logger.LogInformation("Vehicle status updated");
         }
 
         public Vehicle GetVehicleById(int id)
@@ -83,7 +67,6 @@ namespace Model.Repositories
         {
             _clientDbContext.Vehicles.RemoveRange(_clientDbContext.Vehicles.Where(x => x.id == id));
             _clientDbContext.SaveChanges();
-            _logger.LogInformation("Vehicle deleted successfully");
         }
     }
 }

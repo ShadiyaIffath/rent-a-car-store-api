@@ -12,10 +12,8 @@ namespace Model.Repositories
 {
     public class InquiryRepository : RepositoryBase<Inquiry>, IInquiryRepository
     {
-        private ILogger _logger;
-        public InquiryRepository(ClientDbContext clientDbContext, ILogger<InquiryRepository> logger) : base(clientDbContext)
+        public InquiryRepository(ClientDbContext clientDbContext) : base(clientDbContext)
         {
-            _logger = logger;
         }
 
         public List<Inquiry> GetInquiries()
@@ -34,7 +32,6 @@ namespace Model.Repositories
             Inquiry inquiry = _clientDbContext.Inquiries.Where(x => x.id == id).FirstOrDefault();
             inquiry.responded = true;
             _clientDbContext.SaveChanges();
-            _logger.LogInformation("Inquiry status has been updated");
         }
     }
 }

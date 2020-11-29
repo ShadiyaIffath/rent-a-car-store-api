@@ -5,8 +5,7 @@ using Model.Entities;
 using Model.Migrations;
 using Model.Models;
 using Model.Repositories;
-using Model.Repositories.Interfaces;
-using Org.BouncyCastle.Math.EC.Rfc7748;
+using Model.Repositories.RepositoryFactory;
 using ProjectAPI.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -20,25 +19,20 @@ namespace ProjectAPI.Services
     {
         private readonly IMapper _mapper;
         private ILogger _logger;
-        private IVehicleBookingRepository _vehicleBookingRepository;
-        private IEquipmentBookingRepository _equipmentBookingRepository;
+        private IRepositoryFactory _repositoryFactory;
         private readonly IMailService _mailService;
-        private IAccountRepository _accountRepository;
 
-        public BookingService(IMapper mapper, IVehicleBookingRepository bookingRepository, IAccountRepository accountRepository,
-            IEquipmentBookingRepository equipmentRepository, IMailService mailService, ILogger<BookingService> logger)
+        public BookingService(IMapper mapper, IMailService mailService, ILogger<BookingService> logger, IRepositoryFactory repositoryFactory)
         {
             _mapper = mapper;
-            _vehicleBookingRepository = bookingRepository;
+            _repositoryFactory = repositoryFactory;
             _logger = logger;
-            _equipmentBookingRepository = equipmentRepository;
             _mailService = mailService;
-            _accountRepository = accountRepository;
         }
 
         public bool validateVehicleAvailability(int? id, DateTime start, DateTime end, int vehicleId)
         {
-            List<VehicleBooking> bookings = _vehicleBookingRepository.validateRange(id, start, end, vehicleId);
+            List<VehicleBooking> bookings = _repositoryFactory.VehicleBookingRepository.validateRange(id, start, end, vehicleId);
 
             if(bookings.Count == 0)
             {
@@ -52,7 +46,7 @@ namespace ProjectAPI.Services
 
         public List<EquipmentDto> GetEquipmentAvailable(int? id, DateTime start, DateTime end)
         {
-            return _mapper.Map<List<EquipmentDto>>(_equipmentBookingRepository.GetAvailableEquipment(id, start, end));
+            return _mapper.Map<List<EquipmentDto>>(_repositoryFactory.EquipmentBookingRepository.GetAvailableEquipment(id, start, end));
 
         }
 
@@ -62,7 +56,7 @@ namespace ProjectAPI.Services
             {
                 VehicleBooking vehicle = _mapper.Map<VehicleBooking>(createBooking.vehicleBooking);
                 vehicle.confirmationCode = ConfirmationCode.RandomString();
-                _vehicleBookingRepository.Create(vehicle);
+                _repositoryFactory.VehicleBookingRepository.Create(vehicle);
                 SendMail(vehicle);
                 _logger.LogInformation("Vehicle booking created");
 
@@ -72,7 +66,7 @@ namespace ProjectAPI.Services
                 {
                     e.vehicleBookingId = vehicle.id;
                 }
-                _equipmentBookingRepository.CreateEquipmentBooking(equipmentBookings);
+                _repositoryFactory.EquipmentBookingRepository.CreateEquipmentBooking(equipmentBookings);
                 _logger.LogInformation("Equipment booking created");
             }
             catch(Exception ex)
@@ -84,21 +78,21 @@ namespace ProjectAPI.Services
 
         private void SendMail(VehicleBooking vehicle)
         {
-            Account account = _accountRepository.GetAccountById(vehicle.accountId);
+            Account account = _repositoryFactory.AccountRepository.GetAccountById(vehicle.accountId);
             _mailService.SendBookingConfirmationEmail(account.email, account.firstName + " " + account.lastName, vehicle);
         }
 
         public List<BookingDto> GetAllBookings()
         {
             List<BookingDto> dto = new List<BookingDto>();
-            List <VehicleBooking> vehicleBookings = _vehicleBookingRepository.GetBookings();
+            List <VehicleBooking> vehicleBookings = _repositoryFactory.VehicleBookingRepository.GetBookings();
             List<EquipmentBookingDto> equipmentBookings;
 
             foreach(var x in vehicleBookings)
             {
                 x.account.DecryptModel();
                 equipmentBookings = new List<EquipmentBookingDto>();
-                equipmentBookings.AddRange(_mapper.Map < List < EquipmentBookingDto>>(_equipmentBookingRepository.GetEquipmentBookingsFromBooking(x.id)));
+                equipmentBookings.AddRange(_mapper.Map < List < EquipmentBookingDto>>(_repositoryFactory.EquipmentBookingRepository.GetEquipmentBookingsFromBooking(x.id)));
                 dto.Add(new BookingDto
                 {
                     vehicleBooking = _mapper.Map<VehicleBookingDto>(x),
@@ -112,14 +106,14 @@ namespace ProjectAPI.Services
         public List<BookingDto> GetUserBookings(int id)
         {
             List<BookingDto> dto = new List<BookingDto>();
-            List<VehicleBooking> vehicleBookings = _vehicleBookingRepository.GetUserBookings(id);
+            List<VehicleBooking> vehicleBookings = _repositoryFactory.VehicleBookingRepository.GetUserBookings(id);
             List<EquipmentBookingDto> equipmentBookings;
 
             foreach (var x in vehicleBookings)
             {
                 x.account.DecryptModel();
                 equipmentBookings = new List<EquipmentBookingDto>();
-                equipmentBookings.AddRange(_mapper.Map<List<EquipmentBookingDto>>(_equipmentBookingRepository.GetEquipmentBookingsFromBooking(x.id)));
+                equipmentBookings.AddRange(_mapper.Map<List<EquipmentBookingDto>>(_repositoryFactory.EquipmentBookingRepository.GetEquipmentBookingsFromBooking(x.id)));
                 dto.Add(new BookingDto
                 {
                     vehicleBooking = _mapper.Map<VehicleBookingDto>(x),
@@ -132,7 +126,7 @@ namespace ProjectAPI.Services
 
         public void DeleteBooking(int id)
         {
-            _vehicleBookingRepository.DeleteBooking(id);
+            _repositoryFactory.VehicleBookingRepository.DeleteBooking(id);
             _logger.LogInformation("Booking #"+id+" deleted successfully");
         }
 
@@ -146,7 +140,7 @@ namespace ProjectAPI.Services
 
             foreach(var e in dto.equipmentBookings)
             {
-                List<EquipmentBooking> bookings = _equipmentBookingRepository.validateRange(e.id, e.startTime, e.endTime, e.equipmentId);
+                List<EquipmentBooking> bookings = _repositoryFactory.EquipmentBookingRepository.validateRange(e.id, e.startTime, e.endTime, e.equipmentId);
                 if (bookings.Count != 0)
                 {
                     return false;
@@ -157,7 +151,7 @@ namespace ProjectAPI.Services
 
         public void UpdateBooking(UpdateBookingDto dto)
         {
-            _vehicleBookingRepository.Update(_mapper.Map<VehicleBooking>(dto.vehicleBooking));
+            _repositoryFactory.VehicleBookingRepository.Update(_mapper.Map<VehicleBooking>(dto.vehicleBooking));
             List<EquipmentBooking> bookings = _mapper.Map<List<EquipmentBooking>>(dto.equipmentBookings);
             List<int> ids = new List<int>();
 
@@ -165,33 +159,34 @@ namespace ProjectAPI.Services
             {
                 if ( e.id != 0)
                 {
-                    _equipmentBookingRepository.Update(e);
+                    _repositoryFactory.EquipmentBookingRepository.Update(e);
                 }
                 else
                 {
-                    _equipmentBookingRepository.Create(e);
+                    _repositoryFactory.EquipmentBookingRepository.Create(e);
                 }
                 ids.Add(e.id);
             }
 
-            _equipmentBookingRepository.RemoveEquipmentsInBookingById(ids, dto.vehicleBooking.id);
+            _repositoryFactory.EquipmentBookingRepository.RemoveEquipmentsInBookingById(ids, dto.vehicleBooking.id);
 
             _logger.LogInformation("Booking successfully updated");
         }
 
         public void UpdateBookingStatus(int bookingId, string status)
         {
-            _vehicleBookingRepository.UpdateBookingStatus(bookingId, status);
+            _repositoryFactory.VehicleBookingRepository.UpdateBookingStatus(bookingId, status);
+            _logger.LogInformation("Booking #" + bookingId + " status updated");
         }
 
         public BookingDto GetBooking(int id)
         {
-            VehicleBooking vehicle = _vehicleBookingRepository.GetVehicleBooking(id);
+            VehicleBooking vehicle = _repositoryFactory.VehicleBookingRepository.GetVehicleBooking(id);
             vehicle.account.DecryptModel();
             BookingDto dto = new BookingDto()
             {
                 vehicleBooking = _mapper.Map<VehicleBookingDto>(vehicle),
-                equipmentBookings = _mapper.Map<List<EquipmentBookingDto>>(_equipmentBookingRepository.GetEquipmentBookingsFromBooking(id))
+                equipmentBookings = _mapper.Map<List<EquipmentBookingDto>>(_repositoryFactory.EquipmentBookingRepository.GetEquipmentBookingsFromBooking(id))
             };
 
             return dto;

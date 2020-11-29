@@ -7,6 +7,7 @@ using AutoMapper;
 using Hangfire;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Model.Repositories.RepositoryFactory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -115,6 +116,7 @@ namespace ProjectAPI
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
             services.AddSingleton<IJwtAuthenticationManager>(new JwtAuthenticationManager(key));
+            services.AddScoped<IRepositoryFactory, RepositoryFactory>();
             services.AddTransient<IMailService, Services.MailService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEquipmentService, EquipmentService>();

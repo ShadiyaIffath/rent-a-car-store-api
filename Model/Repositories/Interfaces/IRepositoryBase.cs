@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Model.Repositories.Interfaces
 {
-    public interface IRepositoryBase<T>
+    public interface IRepositoryBase<T> 
     {
         IQueryable<T> FindAll();
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);

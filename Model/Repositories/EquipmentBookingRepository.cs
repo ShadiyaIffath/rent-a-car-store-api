@@ -15,11 +15,8 @@ namespace Model.Repositories
 {
     public class EquipmentBookingRepository : RepositoryBase<EquipmentBooking>, IEquipmentBookingRepository
     {
-        private ILogger _logger;
-
-        public EquipmentBookingRepository(ClientDbContext clientDbContext, ILogger<EquipmentBookingRepository> logger) : base(clientDbContext)
+        public EquipmentBookingRepository(ClientDbContext clientDbContext) : base(clientDbContext)
         {
-            _logger = logger;
         }
 
         public List<EquipmentBooking> validateRange(int? id, DateTime start, DateTime end, int equipmentId)
