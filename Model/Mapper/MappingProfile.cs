@@ -21,7 +21,7 @@ namespace Model.Mapper
                 .ForMember(x => x.active, opts => opts.MapFrom(y => y.active))
                 .ForMember(x => x.activatedDate, opts => opts.MapFrom(y => y.activatedDate.Date))
                 .ForMember(x => x.drivingLicense, opt=> opt.Ignore())
-                .ForMember(x => x.additionalIdentitfication, opt => opt.Ignore())
+                .ForMember(x => x.additionalIdentification, opt => opt.Ignore())
                 .ForMember(x => x.id, opt => opt.Ignore())
                 .ForMember(x => x.typeId, opt => opt.Ignore());
             CreateMap<CreateVehicleTypeDto, VehicleType>();

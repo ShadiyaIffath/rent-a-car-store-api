@@ -14,6 +14,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Permissions;
 using System.Threading.Tasks;
+using System.Transactions;
 using UtilityLibrary.Utils;
 
 namespace ProjectAPI.Services
@@ -45,7 +46,6 @@ namespace ProjectAPI.Services
             {
                 Account loggedIn = _repositoryFactory.AccountRepository.login(logincredentials.email, logincredentials.password);
 
-
                 if (loggedIn != null)
                 {
                     token = _jwtAuthenticationManager.Authenticate(logincredentials.email, loggedIn.type.type, loggedIn.id);
@@ -65,7 +65,7 @@ namespace ProjectAPI.Services
             account.drivingLicense = Convert.FromBase64String(drivingLicense.value);
 
             ImageFile additionalIdentification = JsonConvert.DeserializeObject<ImageFile>(customerDto.additionalIdentification.ToString());
-            account.additionalIdentitfication = Convert.FromBase64String(additionalIdentification.value);
+            account.additionalIdentification = Convert.FromBase64String(additionalIdentification.value);
             _repositoryFactory.AccountRepository.createCustomerAccount(account);
             account.DecryptModel();
             SendWelcomeEmail(account.email, account.firstName+" " + account.lastName);
@@ -117,12 +117,14 @@ namespace ProjectAPI.Services
             {
                 return false;
             }
-
-            Account a = _mapper.Map<Account>(dto);
+            Account a = _repositoryFactory.AccountRepository.GetAccountById(dto.id);
+            a.firstName = dto.firstName;
+            a.lastName = dto.lastName;
+            a.email = dto.email;
+            a.phone = dto.phone;
             a.EncryptModel();
             _repositoryFactory.AccountRepository.Update(a);
-            a.DecryptModel();
-            SendProfileUpdatedMail(a.email, a.firstName + " " + a.lastName);
+            SendProfileUpdatedMail(dto.email, dto.firstName + " " + dto.lastName);
             _logger.LogInformation("Account successfully updated");
             return true;
         }
@@ -136,9 +138,29 @@ namespace ProjectAPI.Services
 
         public void UpdateAccountPassword(int id, string password)
         {
-            password = EncryptUtil.EncryptString(password);
-            _repositoryFactory.AccountRepository.UpdatePassword(id, password);
+            Account a = _repositoryFactory.AccountRepository.GetAccountById(id);
+            a.DecryptModel();
+            a.password = password;
+            a.EncryptModel();
+            _repositoryFactory.AccountRepository.Update(a);
             _logger.LogInformation("Account password changed");
+        }
+
+        public void UpdateAccountIdentificationDetails(UpdateAccountDto dto)
+        {
+            Account account = _repositoryFactory.AccountRepository.GetAccountById(dto.id);
+            if(dto.licenseId != null && dto.licenseId != "")
+            {
+                ImageFile drivingLicense = JsonConvert.DeserializeObject<ImageFile>(dto.drivingLicense.ToString());
+                account.drivingLicense = Convert.FromBase64String(drivingLicense.value);
+            }
+           
+            if(dto.additionalIdentification != null)
+            {
+                ImageFile additionalIdentification = JsonConvert.DeserializeObject<ImageFile>(dto.additionalIdentification.ToString());
+                account.additionalIdentification = Convert.FromBase64String(additionalIdentification.value);
+            }
+            _repositoryFactory.AccountRepository.Update(account);
         }
 
         public DashboardCardsView GetCardDetails()

@@ -33,5 +33,7 @@ namespace ProjectAPI.Services.Interfaces
         bool validateLicense(string id);
 
         bool validateFraudLicense(string license);
+
+        void UpdateAccountIdentificationDetails(UpdateAccountDto dto);
     }
 }

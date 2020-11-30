@@ -10,7 +10,7 @@ namespace Model.Models
 
         public DateTime dayAdded { get; set; }
 
-        public string carCode { get; set; }
+        public string make { get; set; }
 
         public string model { get; set; }
 
@@ -22,8 +22,8 @@ namespace Model.Models
 
         public int typeId { get; set; }
 
-        public int engineCapacity { get; set; }
+        public float engineCapacity { get; set; }
 
-        public int fuelConsumption { get; set; }
+        public float fuelConsumption { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace ProjectAPI.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPost("add-equipment"), DisableRequestSizeLimit]
         public IActionResult CreateEquipment([FromBody] CreateEquipmentDto createEquipment)
         {
@@ -46,7 +46,7 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPost("add-category"), DisableRequestSizeLimit]
         public IActionResult CreateEquipmentCategory([FromBody] CreateCategoryDto createCategory)
         {
@@ -65,7 +65,7 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPatch("update-equipment"), DisableRequestSizeLimit]
         public IActionResult UpdateEquipment([FromBody] EquipmentDto equipmentDto)
         {
@@ -88,7 +88,7 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpGet()]
         public async Task<IActionResult> GetAllEquipment()
         {
@@ -96,6 +96,7 @@ namespace ProjectAPI.Controllers
             return Ok(equipment);
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpGet("equipment-categories")]
         public async Task<IActionResult> GetAllEquipmentCategories()
         {
@@ -103,6 +104,7 @@ namespace ProjectAPI.Controllers
             return Ok(categories);
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpGet("get-equipment")]
         public async Task<IActionResult> GetEquipmentById(int id)
         {
@@ -121,7 +123,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpDelete("delete-equipment")]
         public IActionResult DeleteEquipmentById(int id)
         {

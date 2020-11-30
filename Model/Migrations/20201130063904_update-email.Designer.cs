@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Model.DatabaseContext;
 
 namespace Model.Migrations
 {
     [DbContext(typeof(ClientDbContext))]
-    partial class ClientDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201130063904_update-email")]
+    partial class updateemail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,7 @@ namespace Model.Migrations
                     b.Property<bool>("active")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("additionalIdentification")
+                    b.Property<byte[]>("additionalIdentitfication")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("dob")
@@ -283,6 +285,11 @@ namespace Model.Migrations
                     b.Property<bool>("automatic")
                         .HasColumnType("bit");
 
+                    b.Property<string>("carCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
                     b.Property<DateTime>("dayAdded")
                         .HasColumnType("datetime2");
 
@@ -294,20 +301,15 @@ namespace Model.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<float>("engineCapacity")
-                        .HasColumnType("real");
+                    b.Property<int>("engineCapacity")
+                        .HasColumnType("int");
 
-                    b.Property<float>("fuelConsumption")
-                        .HasColumnType("real");
+                    b.Property<int>("fuelConsumption")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("image")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("make")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
 
                     b.Property<string>("model")
                         .IsRequired()

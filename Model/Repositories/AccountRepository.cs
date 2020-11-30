@@ -30,7 +30,7 @@ namespace Model.Repositories
             {
                 ac.DecryptModel();
 
-                if (ac.email == email && ac.password == password)
+                if (ac.email == email && ac.password == password && ac.active)
                 {
                     valid = ac;
                     break;
@@ -124,7 +124,7 @@ namespace Model.Repositories
             _clientDbContext.SaveChanges();
             if (status == false)
             {
-                (from v in _clientDbContext.VehicleBookings where v.account.id == id select v).ToList().ForEach(s => s.status = "Cancelled");
+                (from v in _clientDbContext.VehicleBookings where v.account.id == id && (v.status=="Created" || v.status == "Collected") select v).ToList().ForEach(s => s.status = "Cancelled");
                 _clientDbContext.SaveChanges();
             }
         }

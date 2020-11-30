@@ -19,7 +19,7 @@ namespace ProjectAPI.Controllers
         {
             _dmvService = dmvService;
         }
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpGet("get-dmv")]
         public async Task<IActionResult> GetAllDMV()
         {
@@ -38,7 +38,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin,customer")]
         [HttpPost("validate-license")]
         public async Task<IActionResult> ValidateLicense([FromForm] DMVValidationRequest request )
         {

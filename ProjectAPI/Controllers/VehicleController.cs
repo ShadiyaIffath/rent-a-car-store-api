@@ -48,6 +48,7 @@ namespace ProjectAPI.Controllers
             return Ok(vehicles);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("add-type")]
         public IActionResult CreateVehicleType([FromBody] CreateVehicleTypeDto vehicleTypeDto)
         {
@@ -79,7 +80,8 @@ namespace ProjectAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [Authorize]
+
+        [Authorize(Roles = "admin")]
         [HttpPost("add-vehicle"), DisableRequestSizeLimit]
         public IActionResult AddVehicle([FromBody]CreateVehicleDto createVehicleDto)
         {
@@ -91,9 +93,9 @@ namespace ProjectAPI.Controllers
             {
                 _vehicleService.AddVehicle(createVehicleDto);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest("Invalid details entered");
+                return BadRequest("Invalid details entered: "+ ex.Message);
             }
             return Ok();
         }
@@ -116,7 +118,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPatch("update-vehicle"), DisableRequestSizeLimit]
         public IActionResult UpdateVehicle([FromBody]UpdateVehicleDto updateVehicleDto)
         {
@@ -135,7 +137,7 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPost("update-vehicle-status")]
         public IActionResult UpdateVehicleStatus([FromBody] UpdateStatusVehicleDto updateVehicleDto)
         {
@@ -154,7 +156,7 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpDelete("delete-vehicle")]
         public IActionResult DeleteVehicleById(int id)
         {

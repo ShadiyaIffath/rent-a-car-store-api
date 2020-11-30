@@ -28,8 +28,8 @@ namespace ProjectAPI.Controllers
             _webScrapingService = webScrapingService;
             _fraudClaimRepository = fraudClaimRepository;
         }
-        
-    
+
+        [Authorize(Roles = "admin")]
         [HttpGet("")]
         public async Task<IActionResult> GetAllCompetitiveData()
         {

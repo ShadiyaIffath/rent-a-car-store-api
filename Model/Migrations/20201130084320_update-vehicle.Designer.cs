@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Model.DatabaseContext;
 
 namespace Model.Migrations
 {
     [DbContext(typeof(ClientDbContext))]
-    partial class ClientDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201130084320_update-vehicle")]
+    partial class updatevehicle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,7 @@ namespace Model.Migrations
                     b.Property<bool>("active")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("additionalIdentification")
+                    b.Property<byte[]>("additionalIdentitfication")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("dob")

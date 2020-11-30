@@ -14,7 +14,7 @@ namespace Model.Entities
         public int id { get; set; }
 
         [Required]
-        [MaxLength(150)]
+        [MaxLength(250)]
         public string email { get; set; }
 
         [Required]
@@ -38,7 +38,7 @@ namespace Model.Entities
 
         public byte[] drivingLicense { get; set; }
 
-        public byte[] additionalIdentitfication { get; set; }
+        public byte[] additionalIdentification { get; set; }
 
         [Required]
         public bool active { get; set; }

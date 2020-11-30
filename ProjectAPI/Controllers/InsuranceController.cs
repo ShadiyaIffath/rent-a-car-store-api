@@ -22,6 +22,7 @@ namespace ProjectAPI.Controllers
             _insurerService = insurerService;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("frauds")]
         public async Task<IActionResult> GetAllFrauds()
         {
@@ -36,6 +37,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpPost("validate-fraud")]
         public async Task<IActionResult> ValidateLicense(string drivingLicense)
         {

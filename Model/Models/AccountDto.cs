@@ -30,6 +30,6 @@ namespace Model.Models
 
         public byte[] drivingLicense { get; set; }
 
-        public byte[] additionalIdentitfication { get; set; }
+        public byte[] additionalIdentification { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace ProjectAPI.Controllers
         {
             _inquiryService = inquiryService;
         }
-
+        
         [HttpPost("make-inquiry")]
         public IActionResult MakeInquiry([FromBody] CreateInquiryDto createInquiry)
         {
@@ -41,7 +41,7 @@ namespace ProjectAPI.Controllers
            
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpGet("all-inquiries")]
         public async Task<IActionResult> GetAllInquiry()
         {
@@ -56,7 +56,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpDelete("delete-inquiry")]
         public IActionResult DeleteInquiry(int id)
         {
@@ -75,7 +75,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPost("respond")]
         public IActionResult RespondToInquiry(InquiryDto dto)
         {

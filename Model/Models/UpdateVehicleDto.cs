@@ -12,7 +12,7 @@ namespace Model.Models
 
         public string engine { get; set; }
 
-        public string carCode { get; set; }
+        public string make { get; set; }
 
         public bool active { get; set; }
 
@@ -26,9 +26,9 @@ namespace Model.Models
 
         public Object image { get; set; }
 
-        public int engineCapacity { get; set; }
+        public float engineCapacity { get; set; }
 
-        public int fuelConsumption { get; set; }
+        public float fuelConsumption { get; set; }
 
     }
 }

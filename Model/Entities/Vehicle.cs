@@ -23,8 +23,8 @@ namespace Model.Entities
         public DateTime dayRemoved { get; set; }
 
         [Required]
-        [MaxLength(10)]
-        public string carCode { get; set; }
+        [MaxLength(25)]
+        public string make { get; set; }
 
 
         [Required]
@@ -42,10 +42,10 @@ namespace Model.Entities
         public byte[] image { get; set; }
 
         [Required]
-        public int fuelConsumption { get; set; }
+        public float fuelConsumption { get; set; }
 
         [Required]
-        public int engineCapacity { get; set; }
+        public float engineCapacity { get; set; }
 
         [ForeignKey("typeId")]
         public VehicleType type { get; set; }

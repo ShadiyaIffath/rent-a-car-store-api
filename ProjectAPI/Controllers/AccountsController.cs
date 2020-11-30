@@ -55,17 +55,17 @@ namespace ProjectAPI.Controllers
             {
                 if (_accountService.validateEmail(customerDto.email))
                 {
-                    return Conflict("Email in use");
+                    return Conflict("Conflict");
                 }
 
                 if (_accountService.validateLicense(customerDto.licenseId))
                 {
-                    return StatusCode(StatusCodes.Status403Forbidden, "License is not allowed");
+                    return StatusCode(StatusCodes.Status403Forbidden, "DMV");
                 }
 
                 if (_accountService.validateFraudLicense(customerDto.licenseId))
                 {
-                    return StatusCode(StatusCodes.Status403Forbidden, "License is not allowed");
+                    return StatusCode(StatusCodes.Status403Forbidden, "Frauds");
                 }
                 _accountService.RegisterUser(customerDto);
                  return Ok();
@@ -104,7 +104,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpPatch("update-account-status")]
         public IActionResult UpdateAccountStatus([FromBody]AccountDto dto)
         {
@@ -123,7 +123,7 @@ namespace ProjectAPI.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin,customer")]
         [HttpGet("get-account")]
         public async Task<IActionResult> GetAccountDetails(int id)
         {
@@ -138,7 +138,38 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin,customer")]
+        [HttpPatch("update-account-identity")]
+        public IActionResult UpdateAccountIdentification([FromBody] UpdateAccountDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                if (dto.licenseId != null && dto.licenseId != "")
+                {
+                    if (_accountService.validateLicense(dto.licenseId))
+                    {
+                        return StatusCode(StatusCodes.Status403Forbidden, "DMV");
+                    }
+
+                    if (_accountService.validateFraudLicense(dto.licenseId))
+                    {
+                        return StatusCode(StatusCodes.Status403Forbidden, "Fraud");
+                    }
+                }
+                _accountService.UpdateAccountIdentificationDetails(dto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Update Failed" + ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "admin,customer")]
         [HttpPatch("update-account")]
         public IActionResult UpdateAccount([FromBody] AccountDto dto)
         {
@@ -163,7 +194,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin,customer")]
         [HttpPost("request-change")]
         public IActionResult RequestPasswordChange([FromBody] AccountDto dto)
         {
@@ -182,7 +213,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin,customer")]
         [HttpPatch("update-password")]
         public IActionResult UpdatePassword([FromBody] AccountDto dto)
         {
@@ -201,7 +232,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpGet("dashboard")]
         public async Task<IActionResult> DashboardData()
         {

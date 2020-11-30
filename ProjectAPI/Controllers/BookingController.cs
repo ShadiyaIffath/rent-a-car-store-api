@@ -28,6 +28,7 @@ namespace ProjectAPI.Controllers
             _bookingService = bookingService;
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpPost("validate-booking")]
         public async Task<IActionResult> ValidateBookingRange([FromBody] VehicleBookingDto bookingDto)
         {
@@ -51,6 +52,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpPost("get-available-equipment")]
         public async Task<IActionResult> GetAvailableEquipment([FromBody] VehicleBookingDto bookingDto)
         {
@@ -70,6 +72,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpPost("create-booking")]
         public IActionResult CreateBooking([FromBody]CreateBookingDto bookingDto)
         {
@@ -88,7 +91,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
-        
+        [Authorize(Roles = "admin")]
         [HttpGet("all-bookings")]
         public async Task<IActionResult> GetAllBookings()
         {
@@ -102,6 +105,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpDelete("delete-booking")]
         public IActionResult DeleteBooking(int id)
         {
@@ -116,6 +120,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpPatch("update-booking")]
         public IActionResult UpdateBooking([FromBody] UpdateBookingDto dto)
         {
@@ -147,6 +152,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,customer")]
         [HttpPatch("update-status")]
         public IActionResult UpdateStatus([FromBody] UpdateBookingDto dto)
         {
@@ -176,7 +182,8 @@ namespace ProjectAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
+        [Authorize(Roles = "admin,customer")]
         [HttpGet("get-booking")]
         public async Task<IActionResult> GetBookingById(int id)
         {
@@ -192,6 +199,7 @@ namespace ProjectAPI.Controllers
             }
         }
 
+        [Authorize(Roles = "customer")]
         [HttpGet("user-bookings")]
         public async Task<IActionResult> GetUserBookings(int id)
         {
