@@ -1,0 +1,625 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Model.Repositories.AccountRepository">
+    <Position X="2.25" Y="5.5" Width="1.5" />
+    <InheritanceLine Type="Model.Repositories.Base.RepositoryBase&lt;T&gt;" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.25" Y="4.315" />
+        <Point X="5.25" Y="6.125" />
+        <Point X="3.75" Y="6.125" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.Base.RepositoryBase&lt;T&gt;">
+    <Position X="4.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="_clientDbContext" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.CarRatingRepository">
+    <Position X="4.25" Y="7" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.DMVRepository">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <InheritanceLine Type="Model.Repositories.Base.RepositoryBase&lt;T&gt;" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.25" Y="4.315" />
+        <Point X="5.25" Y="5.062" />
+        <Point X="2" Y="5.062" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.EquipmentBookingRepository">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="Model.Repositories.Base.RepositoryBase&lt;T&gt;" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="6" Y="2.968" />
+        <Point X="7.25" Y="2.968" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.EquipmentRepository">
+    <Position X="7.75" Y="4.25" Width="1.5" />
+    <InheritanceLine Type="Model.Repositories.Base.RepositoryBase&lt;T&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="3.875" />
+        <Point X="7.627" Y="3.875" />
+        <Point X="7.627" Y="5.875" />
+        <Point X="7.75" Y="5.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.FraudClaimRepository">
+    <Position X="17" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.InquiryRepository">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.VehicleBookingRepository">
+    <Position X="2.5" Y="0.5" Width="1.5" />
+    <InheritanceLine Type="Model.Repositories.Base.RepositoryBase&lt;T&gt;" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="4.562" Y="2.25" />
+        <Point X="4.562" Y="1.789" />
+        <Point X="4" Y="1.789" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.VehicleRepository">
+    <Position X="6" Y="4.5" Width="1.5" />
+    <InheritanceLine Type="Model.Repositories.Base.RepositoryBase&lt;T&gt;" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.25" Y="4.315" />
+        <Point X="5.25" Y="5.812" />
+        <Point X="6" Y="5.812" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Repositories.RepositoryFactory.RepositoryFactory">
+    <Position X="2.5" Y="11" Width="1.5" />
+    <AssociationLine Name="AccountRepository" Type="Model.Repositories.Interfaces.IAccountRepository" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.312" Y="12.296" />
+        <Point X="3.293" Y="12.389" />
+        <Point X="3.293" Y="14.041" />
+        <Point X="15.938" Y="14.041" />
+        <Point X="15.938" Y="11.964" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.161" Y="0.06" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="DMVRepository" Type="Model.Repositories.Interfaces.IDMVRepository" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4" Y="11.938" />
+        <Point X="8.109" Y="11.938" />
+        <Point X="8.109" Y="11" />
+        <Point X="8.917" Y="11" Type="JumpStart" />
+        <Point X="9.083" Y="11" Type="JumpEnd" />
+        <Point X="10.5" Y="11" />
+        <Point X="10.5" Y="10.81" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="CarRatingRepository" Type="Model.Repositories.Interfaces.ICarRatingRepository" ManuallyRouted="true">
+      <Path>
+        <Point X="4" Y="11.662" />
+        <Point X="7.848" Y="11.662" />
+        <Point X="7.848" Y="8.3" />
+        <Point X="10" Y="8.3" />
+        <Point X="10" Y="8.425" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="EquipmentBookingRepository" Type="Model.Repositories.Interfaces.IEquipmentBookingRepository" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.062" Y="12.296" />
+        <Point X="3.062" Y="14.224" />
+        <Point X="15.167" Y="14.224" Type="JumpStart" />
+        <Point X="15.333" Y="14.224" Type="JumpEnd" />
+        <Point X="16.382" Y="14.224" />
+        <Point X="16.382" Y="7.5" />
+        <Point X="15.5" Y="7.5" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="EquipmentRepository" Type="Model.Repositories.Interfaces.IEquipmentRepository" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.75" Y="12.296" />
+        <Point X="3.75" Y="13.915" />
+        <Point X="13.625" Y="13.915" />
+        <Point X="13.625" Y="13.637" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="InquiryRepository" Type="Model.Repositories.Interfaces.IInquiryRepository">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="1.167" Y="-0.316" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="VehicleBookingRepository" Type="Model.Repositories.Interfaces.IVehicleBookingRepository" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="12.296" />
+        <Point X="3.5" Y="13.283" />
+        <Point X="3.667" Y="13.283" Type="JumpStart" />
+        <Point X="3.833" Y="13.283" Type="JumpEnd" />
+        <Point X="10.75" Y="13.283" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.612" Y="-0.231" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="AccountRepository" />
+      <Property Name="DMVRepository" />
+      <Property Name="CarRatingRepository" />
+      <Property Name="EquipmentBookingRepository" />
+      <Property Name="EquipmentRepository" />
+      <Property Name="InquiryRepository" />
+      <Property Name="VehicleBookingRepository" />
+      <Property Name="VehicleRepository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.DatabaseContext.ClientDbContext" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Model.Entities.Account">
+    <Position X="13.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="type" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Model.Entities.AccountType">
+    <Position X="15.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Model.Entities.Equipment">
+    <Position X="16.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="category" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Model.Entities.EquipmentBooking">
+    <Position X="18" Y="0.75" Width="1.5" />
+    <AssociationLine Name="equipment" Type="Model.Entities.Equipment" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.594" Y="3.074" />
+        <Point X="18.594" Y="4.062" />
+        <Point X="17.75" Y="4.062" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="vehicleBooking" Type="Model.Entities.VehicleBooking" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.125" Y="3.074" />
+        <Point X="19.125" Y="4" />
+        <Point X="20.5" Y="4" />
+        <Point X="20.5" Y="4.938" />
+        <Point X="21.75" Y="4.938" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="equipment" />
+      <Property Name="vehicleBooking" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Model.Entities.EquipmentCategory">
+    <Position X="18.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Model.Entities.Vehicle">
+    <Position X="21" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="type" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Model.Entities.VehicleBooking">
+    <Position X="21.75" Y="4.75" Width="1.5" />
+    <AssociationLine Name="account" Type="Model.Entities.Account" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="21.75" Y="6.625" />
+        <Point X="15.75" Y="6.625" />
+        <Point X="15.75" Y="5.25" />
+        <Point X="15" Y="5.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="account" />
+      <Property Name="vehicle" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Model.Entities.VehicleType">
+    <Position X="23.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ProjectAPI.Services.AccountService">
+    <Position X="21" Y="8.75" Width="1.5" />
+    <AssociationLine Name="_mapper" Type="AutoMapper.IMapper" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="21.312" Y="12.93" />
+        <Point X="21.312" Y="14.625" />
+        <Point X="18.938" Y="14.625" />
+        <Point X="18.938" Y="15.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EAAACAQAIgAASAEAAKIBQAIAICAAAAAAAAAQAQYgAQA=</HashCode>
+      <FileName>Services\AccountService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_fraudClaimRepository" />
+      <Field Name="_jwtAuthenticationManager" />
+      <Field Name="_mailService" />
+      <Field Name="_repositoryFactory" />
+      <Field Name="_logger" />
+      <Field Name="_mapper" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProjectAPI.Services.BookingService">
+    <Position X="18.25" Y="18" Width="1.5" />
+    <AssociationLine Name="_repositoryFactory" Type="Model.Repositories.RepositoryFactory.IRepositoryFactory" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.188" Y="18" />
+        <Point X="19.188" Y="16.958" />
+        <Point X="19.192" Y="16.958" />
+        <Point X="19.192" Y="14.844" />
+        <Point X="21.464" Y="14.844" Type="JumpStart" />
+        <Point X="21.63" Y="14.844" Type="JumpEnd" />
+        <Point X="21.971" Y="14.844" Type="JumpStart" />
+        <Point X="22.138" Y="14.844" Type="JumpEnd" />
+        <Point X="23.25" Y="14.844" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_logger" Type="Microsoft.Extensions.Logging.ILogger" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.375" Y="18" />
+        <Point X="19.375" Y="15.438" />
+        <Point X="19.75" Y="15.438" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_mapper" Type="AutoMapper.IMapper" FixedToPoint="true">
+      <Path>
+        <Point X="18.375" Y="18" />
+        <Point X="18.375" Y="17.319" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.008" Y="-0.128" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="_mailService" Type="ProjectAPI.Services.Interfaces.IMailService" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.25" Y="19.375" />
+        <Point X="18.083" Y="19.375" Type="JumpStart" />
+        <Point X="17.917" Y="19.375" Type="JumpEnd" />
+        <Point X="17.889" Y="19.375" Type="JumpStart" />
+        <Point X="17.722" Y="19.375" Type="JumpEnd" />
+        <Point X="17.271" Y="19.375" />
+        <Point X="17.271" Y="13.062" />
+        <Point X="19" Y="13.062" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>BAAAAAEACEAAAAAQACABAAACIAAQAAAAAARAAQQAAAA=</HashCode>
+      <FileName>Services\BookingService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_repositoryFactory" />
+      <Field Name="_logger" />
+      <Field Name="_mapper" />
+      <Field Name="_mailService" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProjectAPI.Services.DMVService">
+    <Position X="15.5" Y="17.5" Width="1.5" />
+    <AssociationLine Name="_logger" Type="Microsoft.Extensions.Logging.ILogger" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="19.192" />
+        <Point X="17.188" Y="19.192" Type="JumpStart" />
+        <Point X="17.355" Y="19.192" Type="JumpEnd" />
+        <Point X="17.722" Y="19.192" Type="JumpStart" />
+        <Point X="17.889" Y="19.192" Type="JumpEnd" />
+        <Point X="18" Y="19.192" />
+        <Point X="18" Y="21.308" />
+        <Point X="20" Y="21.308" />
+        <Point X="20" Y="16.488" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_mailService" Type="ProjectAPI.Services.Interfaces.IMailService" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="16.062" Y="17.5" />
+        <Point X="16.062" Y="15.913" />
+        <Point X="17.05" Y="15.913" />
+        <Point X="17.05" Y="12.625" />
+        <Point X="19" Y="12.625" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_repositoryFactory" Type="Model.Repositories.RepositoryFactory.IRepositoryFactory" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="17" Y="17.688" />
+        <Point X="17.188" Y="17.688" Type="JumpStart" />
+        <Point X="17.355" Y="17.688" Type="JumpEnd" />
+        <Point X="18.292" Y="17.688" Type="JumpStart" />
+        <Point X="18.458" Y="17.688" Type="JumpEnd" />
+        <Point X="19.104" Y="17.688" Type="JumpStart" />
+        <Point X="19.271" Y="17.688" Type="JumpEnd" />
+        <Point X="19.292" Y="17.688" Type="JumpStart" />
+        <Point X="19.458" Y="17.688" Type="JumpEnd" />
+        <Point X="19.917" Y="17.688" Type="JumpStart" />
+        <Point X="20.083" Y="17.688" Type="JumpEnd" />
+        <Point X="20.289" Y="17.688" Type="JumpStart" />
+        <Point X="20.456" Y="17.688" Type="JumpEnd" />
+        <Point X="20.573" Y="17.688" Type="JumpStart" />
+        <Point X="20.74" Y="17.688" Type="JumpEnd" />
+        <Point X="20.901" Y="17.688" Type="JumpStart" />
+        <Point X="21.068" Y="17.688" Type="JumpEnd" />
+        <Point X="21.717" Y="17.688" Type="JumpStart" />
+        <Point X="21.884" Y="17.688" Type="JumpEnd" />
+        <Point X="22.444" Y="17.688" Type="JumpStart" />
+        <Point X="22.611" Y="17.688" Type="JumpEnd" />
+        <Point X="22.712" Y="17.688" Type="JumpStart" />
+        <Point X="22.878" Y="17.688" Type="JumpEnd" />
+        <Point X="24" Y="17.688" />
+        <Point X="24" Y="17.007" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAIEAAABAAAAAAAAACABAAAAIAAAAAAAAAAAAQBAAQA=</HashCode>
+      <FileName>Services\DMVService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_logger" />
+      <Field Name="_mapper" />
+      <Field Name="_mailService" />
+      <Field Name="_repositoryFactory" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProjectAPI.Services.EquipmentService">
+    <Position X="21.5" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBAAAAAAQAAgAAAAACQBAAAAIEAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\EquipmentService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_logger" />
+      <Field Name="_mapper" />
+      <Field Name="_repositoryFactory" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProjectAPI.Services.InquiryService">
+    <Position X="14.5" Y="14.5" Width="1.5" />
+    <AssociationLine Name="_mailService" Type="ProjectAPI.Services.Interfaces.IMailService" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="16" Y="14.674" />
+        <Point X="16.848" Y="14.674" />
+        <Point X="16.848" Y="12.188" />
+        <Point X="19" Y="12.188" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_mapper" Type="AutoMapper.IMapper" FixedToPoint="true">
+      <Path>
+        <Point X="16" Y="15.438" />
+        <Point X="16.966" Y="15.438" Type="JumpStart" />
+        <Point X="17.133" Y="15.438" Type="JumpEnd" />
+        <Point X="17.188" Y="15.438" Type="JumpStart" />
+        <Point X="17.355" Y="15.438" Type="JumpEnd" />
+        <Point X="17.5" Y="15.438" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAiABAAAAIAAAAAAAACAAAQAAAAQ=</HashCode>
+      <FileName>Services\InquiryService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_logger" />
+      <Field Name="_mailService" />
+      <Field Name="_mapper" />
+      <Field Name="_repositoryFactory" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProjectAPI.Services.InsurerService">
+    <Position X="19" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAQAAAAAAA=</HashCode>
+      <FileName>Services\InsurerService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_fraudClaimRepository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProjectAPI.Services.MailService">
+    <Position X="26.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAABAAAAAAACAAAAAAAIAAQwAAAQA=</HashCode>
+      <FileName>Services\MailService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_mailSettings" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Model.Models.MailService.MailSettings" Collapsed="true">
+    <Position X="28.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="ProjectAPI.Services.VehicleService">
+    <Position X="24.5" Y="18" Width="1.5" />
+    <AssociationLine Name="_logger" Type="Microsoft.Extensions.Logging.ILogger" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="24.5" Y="20.834" />
+        <Point X="21.068" Y="20.834" Type="JumpStart" />
+        <Point X="20.901" Y="20.834" Type="JumpEnd" />
+        <Point X="20.656" Y="20.834" />
+        <Point X="20.656" Y="16.488" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_mapper" Type="AutoMapper.IMapper" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="24.625" Y="20.834" />
+        <Point X="24.625" Y="21.239" />
+        <Point X="20.373" Y="21.239" />
+        <Point X="20.373" Y="17.26" />
+        <Point X="20.083" Y="17.26" Type="JumpStart" />
+        <Point X="19.917" Y="17.26" Type="JumpEnd" />
+        <Point X="19.458" Y="17.26" Type="JumpStart" />
+        <Point X="19.292" Y="17.26" Type="JumpEnd" />
+        <Point X="19.271" Y="17.26" Type="JumpStart" />
+        <Point X="19.104" Y="17.26" Type="JumpEnd" />
+        <Point X="19" Y="17.26" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAgAAAACABAAAAIAAAgAAIggAACgBAAAA=</HashCode>
+      <FileName>Services\VehicleService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_logger" />
+      <Field Name="_mapper" />
+      <Field Name="_repositoryFactory" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProjectAPI.Services.WebScrapingService">
+    <Position X="26.5" Y="18" Width="1.5" />
+    <AssociationLine Name="_repositoryFactory" Type="Model.Repositories.RepositoryFactory.IRepositoryFactory" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="27.25" Y="18" />
+        <Point X="27.25" Y="17.2" />
+        <Point X="26.25" Y="17.2" />
+        <Point X="26.25" Y="15.562" />
+        <Point X="24.75" Y="15.562" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_logger" Type="Microsoft.Extensions.Logging.ILogger" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="26.75" Y="20.132" />
+        <Point X="26.75" Y="20.979" />
+        <Point X="24.708" Y="20.979" Type="JumpStart" />
+        <Point X="24.542" Y="20.979" Type="JumpEnd" />
+        <Point X="20.984" Y="20.979" />
+        <Point X="20.984" Y="16.488" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_mapper" Type="AutoMapper.IMapper" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="26.938" Y="20.132" />
+        <Point X="26.938" Y="21.458" />
+        <Point X="17.805" Y="21.458" />
+        <Point X="17.805" Y="17.725" />
+        <Point X="17.875" Y="17.725" />
+        <Point X="17.875" Y="17.319" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAEAAAAAAACIBAAAIIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\WebScrapingService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_repositoryFactory" />
+      <Field Name="_logger" />
+      <Field Name="_mapper" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Model.Repositories.Interfaces.IAccountRepository">
+    <Position X="14.75" Y="9" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.IRepositoryBase&lt;T&gt;">
+    <Position X="11.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.ICarRatingRepository">
+    <Position X="9.25" Y="7" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.IDMVRepository">
+    <Position X="9.75" Y="9" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.IEquipmentBookingRepository">
+    <Position X="14" Y="6.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.IEquipmentRepository">
+    <Position X="12.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.IFraudClaimRepository">
+    <Position X="19" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.IInquiryRepository">
+    <Position X="8.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.IVehicleBookingRepository">
+    <Position X="10.75" Y="11.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.Interfaces.IVehicleRepository">
+    <Position X="6" Y="9" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Model.Repositories.RepositoryFactory.IRepositoryFactory">
+    <Position X="23.25" Y="14.75" Width="1.5" />
+    <Members>
+      <Property Name="AccountRepository" Hidden="true" />
+    </Members>
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="AccountRepository" />
+    </ShowAsAssociation>
+  </Interface>
+  <Interface Name="ProjectAPI.Interfaces.IJwtAuthenticationManager">
+    <Position X="24.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Services\Interfaces\IJwtAuthenticationManager.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ProjectAPI.Services.Interfaces.IMailService">
+    <Position X="19" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAABAAAAAAACAAAAAAAIAAAwAAAQA=</HashCode>
+      <FileName>Services\Interfaces\IMailService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Microsoft.Extensions.Logging.ILogger">
+    <Position X="19.75" Y="15" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="AutoMapper.IMapper">
+    <Position X="17.5" Y="15.25" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -62,7 +62,8 @@ namespace ProjectAPI.Controllers
             }
             try
             {
-                List<EquipmentDto> equipment = await Task.FromResult(_bookingService.GetEquipmentAvailable(bookingDto.id, bookingDto.startTime, bookingDto.endTime));
+                List<EquipmentDto> equipment = await Task.FromResult(
+                    _bookingService.GetEquipmentAvailable(bookingDto.id, bookingDto.startTime, bookingDto.endTime));
 
                 return Ok(equipment);
             }

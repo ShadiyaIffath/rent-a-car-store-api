@@ -42,13 +42,17 @@ namespace Model.Repositories
             if (id == 0)
             {
                 ids = _clientDbContext.EquipmentBookings
-                          .Where(s => (s.vehicleBooking.status == "Confirmed" || s.vehicleBooking.status == "Collected") && ((s.startTime <= start && s.vehicleBooking.endTime >= start) || (s.startTime <= end && s.vehicleBooking.endTime >= end) || (s.startTime >= start && s.vehicleBooking.endTime <= end)))
+                          .Where(s => (s.vehicleBooking.status == "Confirmed" || s.vehicleBooking.status == "Collected") && 
+                          ((s.startTime <= start && s.vehicleBooking.endTime >= start) ||
+                          (s.startTime <= end && s.vehicleBooking.endTime >= end) ||
+                          (s.startTime >= start && s.vehicleBooking.endTime <= end)))
                           .Select(x => x.equipment.id).ToList();
             }
             else
             {
                 ids = _clientDbContext.EquipmentBookings
-                          .Where(s => (s.vehicleBooking.status == "Confirmed" || s.vehicleBooking.status == "Collected") && s.vehicleBooking.id != id &&
+                          .Where(s => (s.vehicleBooking.status == "Confirmed" || s.vehicleBooking.status == "Collected") &&
+                           s.vehicleBooking.id != id &&
                            ((s.startTime <= start && s.vehicleBooking.endTime >= start) || (s.startTime <= end && s.vehicleBooking.endTime >= end)
                            || (s.startTime >= start && s.vehicleBooking.endTime <= end)))
                           .Select(x => x.id).ToList();

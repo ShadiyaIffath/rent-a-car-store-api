@@ -25,11 +25,18 @@ namespace Model.Repositories
             //new booking duration validation
             if (id == 0)
             {
-                bookings = _clientDbContext.VehicleBookings.Where(x => x.vehicle.id == vehicleId && (x.status=="Confirmed" || x.status == "Collected") && ((x.startTime <= start && x.endTime >= start) || (x.startTime <= end && x.endTime >= end) || (x.startTime >= start && x.endTime <= end))).ToList();
+                bookings = _clientDbContext.VehicleBookings.Where(x => x.vehicle.id == vehicleId &&
+                (x.status=="Confirmed" || x.status == "Collected") && 
+                ((x.startTime <= start && x.endTime >= start) || (x.startTime <= end && x.endTime >= end) ||
+                (x.startTime >= start && x.endTime <= end))).ToList();
             }//existing booking duration validation
             else
             {
-                bookings = _clientDbContext.VehicleBookings.Where(x => x.vehicle.id == vehicleId && x.id != id && (x.status == "Confirmed" || x.status == "Collected") && ((x.startTime <= start && x.endTime >= start) || (x.startTime <= end && x.endTime >= end || (x.startTime >= start && x.endTime <= end)))).ToList();
+                bookings = _clientDbContext.VehicleBookings.Where(x => x.vehicle.id == vehicleId && 
+                x.id != id &&
+                (x.status == "Confirmed" || x.status == "Collected") &&
+                ((x.startTime <= start && x.endTime >= start) || (x.startTime <= end && x.endTime >= end ||
+                (x.startTime >= start && x.endTime <= end)))).ToList();
             }
             return bookings;
         }

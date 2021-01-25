@@ -61,8 +61,6 @@ namespace ProjectAPI.Services
             htmlDocument.LoadHtml(html);
 
             var carRatesHTMLView = htmlDocument.DocumentNode.Descendants("tbody").ToList();
-            //.Where(node => node.GetAttributeValue("class", "")
-            //.Equals("table selfdriverates")).ToList();
 
             string carType = "";
             var allRows = carRatesHTMLView[0].Descendants("tr").ToList();
