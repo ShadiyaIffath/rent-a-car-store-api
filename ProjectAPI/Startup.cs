@@ -158,13 +158,22 @@ namespace ProjectAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
+            
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<ClientDbContext>();
+                context.Database.EnsureCreated();
+
+                var dbcontext = serviceScope.ServiceProvider.GetRequiredService<InsuranceDbContext>();
+                dbcontext.Database.EnsureCreated();
+            }
 
             var options = new DashboardOptions
             {
                 Authorization = new IDashboardAuthorizationFilter[]
-        {
+            {
             new HangfireAuthorizationFilter(this.tokenValidationParameters, nameof(AccTypes.admin))
-        }
+             }
             };
             app.UseHangfireDashboard("/main/admin/hangfire", options);
             app.UseHangfireServer();
