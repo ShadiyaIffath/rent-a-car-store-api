@@ -1,4 +1,4 @@
-# ProjectAPI
+# Rent A Car API
 A vehicle rental store API created using ASP.Net Core. The application follows onion architecture with EF Core, Hangfire integration for background jobs and
 Web scraping components.
 
