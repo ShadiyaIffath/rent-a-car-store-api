@@ -5,7 +5,7 @@ Web scraping components.
 ## Functionality
 
 1. Web scraping competition price rates
-2. A weekly job to update fraudulent accounts
+2. A weekly job to obtain, read and update fraudulent account details
 3. Manage accounts - View, Add, update, delete, ban.
 4. Manage vehicles - View, Add, update, delete
 5. Manage equipment - View, Add, update, delete
